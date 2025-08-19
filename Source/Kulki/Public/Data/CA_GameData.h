@@ -6,6 +6,8 @@
 #include "Engine/DataAsset.h"
 #include "CA_GameData.generated.h"
 
+class UCA_InputData;
+
 UCLASS()
 class KULKI_API UCA_GameData : public UDataAsset
 {
@@ -13,5 +15,6 @@ class KULKI_API UCA_GameData : public UDataAsset
 
 public:
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCA_InputData> InputData;
 };

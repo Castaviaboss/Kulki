@@ -10,4 +10,8 @@ UCLASS()
 class KULKI_API ACA_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+protected:
+
+	virtual void BeginPlay() override;
 };
