@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "CA_GameData.generated.h"
 
+class UCA_LevelData;
 class UCA_InputData;
 
 UCLASS()
@@ -17,4 +18,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCA_InputData> InputData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCA_LevelData> LevelData;
 };

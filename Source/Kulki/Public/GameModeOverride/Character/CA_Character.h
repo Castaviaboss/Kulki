@@ -31,10 +31,14 @@ protected:
 
 	void MoveTowardsMouse(const float DeltaTime) const;
 
+public:
+
 	void PhysicalPushCharacter(
 		const FVector& Force,
 		const float PushStrength,
 		const bool bImpulse = true) const;
+
+protected:
 
 	void StartMove();
 

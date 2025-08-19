@@ -6,8 +6,23 @@
 #include "GameFramework/GameState.h"
 #include "CA_GameState.generated.h"
 
+class UCA_LevelManagerComponent;
+
+DECLARE_LOG_CATEGORY_EXTERN(GameStateLog, Log, All);
+
 UCLASS()
 class KULKI_API ACA_GameState : public AGameState
 {
 	GENERATED_BODY()
+
+protected:
+
+	ACA_GameState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	virtual void BeginPlay() override;
+
+private:
+
+	UPROPERTY()
+	TObjectPtr<UCA_LevelManagerComponent> LevelManager;
 };
