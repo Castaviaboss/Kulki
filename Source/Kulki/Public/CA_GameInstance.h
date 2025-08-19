@@ -12,4 +12,9 @@ UCLASS()
 class KULKI_API UCA_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCA_GameData> GameData;
 };
