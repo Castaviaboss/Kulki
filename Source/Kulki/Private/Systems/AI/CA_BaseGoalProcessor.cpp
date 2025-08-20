@@ -1,0 +1,39 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "Systems/AI/CA_BaseGoalProcessor.h"
+
+#include "GameModeOverride/GameState/CA_GameState.h"
+#include "Systems/AI/CA_AiController.h"
+#include "Systems/AI/CA_ProcessorTickManager.h"
+
+void UCA_BaseGoalProcessor::InitProcessor(
+	ACA_AiController* OwnerController,
+	ACA_EnemyCharacter* OwnerPawn)
+{
+	Controller = OwnerController;
+	Pawn = OwnerPawn;
+
+	if (bTick)
+	{
+		const ACA_GameState* GameState = Cast<ACA_GameState>(Controller->GetWorld()->GetGameState());
+		if (!IsValid(GameState))
+		{
+			UE_LOG(LogTemp, Error, TEXT("[%hs] GameState invalid"), __FUNCTION__);
+			return;
+		}
+		ACA_ProcessorTickManager* TickManager = GameState->TickManager;
+		if (!IsValid(TickManager))
+		{
+			UE_LOG(LogTemp, Error, TEXT("[%hs] TickManager invalid"), __FUNCTION__);
+			return;
+		}
+		TickManager->AddProcessor(this);
+	}
+	
+	K2_ProcessorInit(OwnerController, OwnerPawn);
+}
+
+void UCA_BaseGoalProcessor::TickProcessor(const float DeltaSeconds)
+{
+	K2_TickProcessor(DeltaSeconds);
+}

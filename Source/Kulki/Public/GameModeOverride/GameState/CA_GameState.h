@@ -6,6 +6,7 @@
 #include "GameFramework/GameState.h"
 #include "CA_GameState.generated.h"
 
+class ACA_ProcessorTickManager;
 class UCA_LevelManagerComponent;
 
 DECLARE_LOG_CATEGORY_EXTERN(GameStateLog, Log, All);
@@ -20,6 +21,11 @@ protected:
 	ACA_GameState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void BeginPlay() override;
+
+public:
+
+	UPROPERTY()
+	TObjectPtr<ACA_ProcessorTickManager> TickManager;
 
 private:
 

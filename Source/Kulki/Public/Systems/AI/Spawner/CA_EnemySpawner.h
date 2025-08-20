@@ -6,6 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "CA_EnemySpawner.generated.h"
 
+struct FAiSpawnSetting;
+class UNavigationSystemV1;
+class UCA_AiSpawnData;
+
+DECLARE_LOG_CATEGORY_EXTERN(SpawnerLog, Log, All);
+
 UCLASS()
 class KULKI_API ACA_EnemySpawner : public AActor
 {
@@ -18,4 +24,37 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	void StartSpawnTimer();
+
+	UFUNCTION()
+	void TrySpawnEnemy();
+
+	FAiSpawnSetting GetSpawnSetting() const;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 CountSpawnedEnemies = 0;
+
+private:
+
+	UPROPERTY()
+	TObjectPtr<UCA_AiSpawnData> SpawnData;
+
+	UPROPERTY()
+	TObjectPtr<AActor> CenterOfSpawn;
+
+	UPROPERTY()
+	TObjectPtr<UNavigationSystemV1> NavigationSystem;
+
+	FTimerDelegate SpawnTimerDelegate;
+
+	FTimerHandle SpawnTimerHandle;
+
+	const float MinChanceToSpawn = 1.0f;
+
+	const float MaxChanceToSpawn = 100.0f;
+
+	const float DefaultBestOptionValue = -1.0f;
 };

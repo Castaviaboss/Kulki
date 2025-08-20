@@ -13,6 +13,7 @@
 #include "Kulki/Public/Data/Level/CA_LevelData.h"
 #include "Kulki/Public/Systems/LevelSystem/Boundary/CA_BaseBoundaryActor.h"
 #include "NavMesh/NavMeshBoundsVolume.h"
+#include "Systems/AI/CA_ProcessorTickManager.h"
 
 DEFINE_LOG_CATEGORY(LevelManagerLog);
 
@@ -49,6 +50,7 @@ void UCA_LevelManagerComponent::InitManager()
 	SetupPlane(LevelData, World);
 	SetupBoundary(LevelData, World);
 	SetupNavMesh(LevelData, World);
+	SetupTickManager(World);
 }
 
 void UCA_LevelManagerComponent::SetupPlane(const UCA_LevelData* LevelData, UWorld* World)
@@ -193,4 +195,12 @@ void UCA_LevelManagerComponent::SetupNavMesh(const UCA_LevelData* LevelData, UWo
 		return;
 	}
 	NavigationSystem->OnNavigationBoundsUpdated(NavMeshBoundsVolume);
+}
+
+void UCA_LevelManagerComponent::SetupTickManager(UWorld* World)
+{
+	World->SpawnActor<ACA_ProcessorTickManager>(
+		ACA_ProcessorTickManager::StaticClass(),
+		FActorSpawnParameters()
+	);
 }

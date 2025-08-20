@@ -34,6 +34,8 @@ protected:
 
 	void SetupNavMesh(const UCA_LevelData* LevelData, UWorld* World);
 
+	void SetupTickManager(UWorld* World);
+
 public:
 
 	UPROPERTY(BlueprintReadOnly)

@@ -6,6 +6,9 @@
 #include "PaperCharacter.h"
 #include "CA_EnemyCharacter.generated.h"
 
+class UCA_EnemyCharacterData;
+class USphereComponent;
+
 UCLASS()
 class KULKI_API ACA_EnemyCharacter : public APaperCharacter
 {
@@ -14,4 +17,11 @@ class KULKI_API ACA_EnemyCharacter : public APaperCharacter
 public:
 
 	ACA_EnemyCharacter();
+
+	virtual void InitCharacter(
+		UCA_EnemyCharacterData* Config,
+		AActor* CenterOfSpawn);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USphereComponent> SphereDetector;
 };

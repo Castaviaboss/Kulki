@@ -3,26 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PaperFlipbook.h"
 #include "Engine/DataAsset.h"
-#include "CA_GameData.generated.h"
-
-class UCA_AiSpawnData;
-class UCA_LevelData;
-class UCA_InputData;
+#include "CA_EnemyCharacterData.generated.h"
 
 UCLASS()
-class KULKI_API UCA_GameData : public UDataAsset
+class KULKI_API UCA_EnemyCharacterData : public UDataAsset
 {
 	GENERATED_BODY()
 
 public:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCA_InputData> InputData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCA_LevelData> LevelData;
+	TSoftObjectPtr<UPaperFlipbook> SourceFlipbook;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCA_AiSpawnData> SpawnData;
+	FLinearColor SpriteColor = FLinearColor::White;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float SphereDetectorRadius = 256.0f;
 };
