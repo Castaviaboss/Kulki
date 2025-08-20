@@ -14,14 +14,7 @@ ACA_BoundaryActor_Collision_Push::ACA_BoundaryActor_Collision_Push()
 void ACA_BoundaryActor_Collision_Push::InitBoundary(const FLevelBoundaryConfiguration& InBoundaryConfig)
 {
 	Super::InitBoundary(InBoundaryConfig);
-
-	Character = Cast<ACA_Character>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	if (!IsValid(Character))
-	{
-		UE_LOG(LogTemp, Error, TEXT("[%hs] Character invalid"), __FUNCTION__);
-		return;
-	}
-
+	
 	PrimitiveComponent = GetComponentByClass<UPrimitiveComponent>();
 	if (!IsValid(PrimitiveComponent))
 	{
@@ -51,16 +44,17 @@ void ACA_BoundaryActor_Collision_Push::InitBoundary(const FLevelBoundaryConfigur
 void ACA_BoundaryActor_Collision_Push::NotifyActorEndOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorEndOverlap(OtherActor);
-
+	
 	if (!IsValid(PrimitiveComponent))
 	{
 		UE_LOG(LogTemp, Error, TEXT("[%hs] PrimitiveComponent invalid"), __FUNCTION__);
 		return;
 	}
 
+	ACA_Character* Character = Cast<ACA_Character>(OtherActor);
 	if (!IsValid(Character))
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%hs] PrimitiveComponent invalid"), __FUNCTION__);
+		UE_LOG(LogTemp, Error, TEXT("[%hs] OtherActor invalid"), __FUNCTION__);
 		return;
 	}
 

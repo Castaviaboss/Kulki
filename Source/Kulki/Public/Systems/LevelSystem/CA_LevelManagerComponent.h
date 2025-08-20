@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "CA_LevelManagerComponent.generated.h"
 
+class ANavMeshBoundsVolume;
 class ACA_BaseBoundaryActor;
 class UCA_LevelData;
 class APaperSpriteActor;
@@ -31,6 +32,8 @@ protected:
 
 	void SetupBoundary(const UCA_LevelData* LevelData, UWorld* World);
 
+	void SetupNavMesh(const UCA_LevelData* LevelData, UWorld* World);
+
 public:
 
 	UPROPERTY(BlueprintReadOnly)
@@ -38,6 +41,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<ACA_BaseBoundaryActor> BoundaryActor;
+
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<ANavMeshBoundsVolume> NavMeshBoundsVolume;
 
 private:
 

@@ -2,13 +2,17 @@
 
 #include "Kulki/Public/Systems/LevelSystem/CA_LevelManagerComponent.h"
 
+#include "NavigationSystem.h"
 #include "PaperSprite.h"
 #include "PaperSpriteActor.h"
 #include "PaperSpriteComponent.h"
+#include "Components/BrushComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kulki/Public/CA_GameInstance.h"
 #include "Kulki/Public/Data/CA_GameData.h"
 #include "Kulki/Public/Data/Level/CA_LevelData.h"
 #include "Kulki/Public/Systems/LevelSystem/Boundary/CA_BaseBoundaryActor.h"
+#include "NavMesh/NavMeshBoundsVolume.h"
 
 DEFINE_LOG_CATEGORY(LevelManagerLog);
 
@@ -44,6 +48,7 @@ void UCA_LevelManagerComponent::InitManager()
 
 	SetupPlane(LevelData, World);
 	SetupBoundary(LevelData, World);
+	SetupNavMesh(LevelData, World);
 }
 
 void UCA_LevelManagerComponent::SetupPlane(const UCA_LevelData* LevelData, UWorld* World)
@@ -152,4 +157,40 @@ void UCA_LevelManagerComponent::SetupBoundary(const UCA_LevelData* LevelData, UW
 	}
 
 	BoundaryActor->InitBoundary(LevelData->BoundaryConfiguration);
+}
+
+void UCA_LevelManagerComponent::SetupNavMesh(const UCA_LevelData* LevelData, UWorld* World)
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ANavMeshBoundsVolume::StaticClass(), FoundActors);
+
+	if (!FoundActors.IsValidIndex(0))
+	{
+		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] NavMeshBoundsVolume not found"), __FUNCTION__);
+		return;
+	}
+	
+	ANavMeshBoundsVolume* NavMesh = Cast<ANavMeshBoundsVolume>(FoundActors[0]);
+	if (!IsValid(NavMesh))
+	{
+		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] NavMesh invalid"), __FUNCTION__);
+		return;
+	}
+	NavMeshBoundsVolume = NavMesh;
+
+	UBrushComponent* BrushComponent = NavMeshBoundsVolume->GetBrushComponent();
+	if (!IsValid(BrushComponent))
+	{
+		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] BrushComponent invalid"), __FUNCTION__);
+		return;
+	}
+	BrushComponent->SetRelativeScale3D(LevelData->PlaneConfiguration.PlaneTransform.GetScale3D());
+
+	UNavigationSystemV1* NavigationSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
+	if (!IsValid(NavigationSystem))
+	{
+		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] NavigationSystem invalid"), __FUNCTION__);
+		return;
+	}
+	NavigationSystem->OnNavigationBoundsUpdated(NavMeshBoundsVolume);
 }

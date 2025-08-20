@@ -32,8 +32,5 @@ protected:
 private:
 
 	UPROPERTY()
-	TObjectPtr<ACA_Character> Character;
-
-	UPROPERTY()
 	TObjectPtr<UPrimitiveComponent> PrimitiveComponent;
 };

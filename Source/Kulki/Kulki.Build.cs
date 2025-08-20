@@ -14,7 +14,9 @@ public class Kulki : ModuleRules
 			"Engine",
 			"InputCore",
 			"EnhancedInput",
-			"Paper2D"
+			"Paper2D",
+			"AIModule",
+			"NavigationSystem"
 		]);
 
 		PrivateDependencyModuleNames.AddRange([]);
