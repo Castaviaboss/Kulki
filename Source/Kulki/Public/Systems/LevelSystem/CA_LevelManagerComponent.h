@@ -31,6 +31,8 @@ protected:
 
 	void SetupBoundary(const UCA_LevelData* LevelData, UWorld* World);
 
+public:
+
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<APaperSpriteActor> PlaneActor;
 

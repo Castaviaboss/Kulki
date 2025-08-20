@@ -1,18 +1,18 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kulki/Public/Systems/LevelSystem/Boundary/CA_BoundaryActor_Push.h"
+#include "Kulki/Public/Systems/LevelSystem/Boundary/CA_BoundaryActor_Math_Push.h"
 #include "Kulki/Public/GameModeOverride/Character/CA_Character.h"
 
-void ACA_BoundaryActor_Push::InitBoundary(const FLevelBoundaryConfiguration& InBoundaryConfig)
+void ACA_BoundaryActor_Math_Push::InitBoundary(const FLevelBoundaryConfiguration& InBoundaryConfig)
 {
 	Super::InitBoundary(InBoundaryConfig);
 
-	ActualBoundaryMin = BoundaryConfig.ManualBoundaryMin;
-	ActualBoundaryMax = BoundaryConfig.ManualBoundaryMax;
+	ActualBoundaryMin = BoundaryConfig.BoxMin;
+	ActualBoundaryMax = BoundaryConfig.BoxMax;
 
 	Character = Cast<ACA_Character>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 
-	if (BoundaryConfig.bShowDebugBounds)
+	if (bShowDebugBounds)
 	{
 		const float LocationZ = GetActorLocation().Z;
 		
@@ -25,19 +25,19 @@ void ACA_BoundaryActor_Push::InitBoundary(const FLevelBoundaryConfiguration& InB
 	}
 }
 
-void ACA_BoundaryActor_Push::Tick(float DeltaTime)
+void ACA_BoundaryActor_Math_Push::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	TrackCharacter();
 	
-	if (BoundaryConfig.bShowDebugBounds)
+	if (bShowDebugBounds)
 	{
 		DrawDebugBoundaries();
 	}
 }
 
-void ACA_BoundaryActor_Push::TrackCharacter() const
+void ACA_BoundaryActor_Math_Push::TrackCharacter() const
 {
 	if (!IsValid(Character))
 	{
@@ -58,7 +58,7 @@ void ACA_BoundaryActor_Push::TrackCharacter() const
 	}
 }
 
-FVector ACA_BoundaryActor_Push::CalculateBoundaryForce(const FVector& Position) const
+FVector ACA_BoundaryActor_Math_Push::CalculateBoundaryForce(const FVector& Position) const
 {
 	FVector Force = FVector::ZeroVector;
 
@@ -75,7 +75,7 @@ FVector ACA_BoundaryActor_Push::CalculateBoundaryForce(const FVector& Position) 
 	return Force;
 }
 
-bool ACA_BoundaryActor_Push::IsWithinBounds(const FVector& Position) const
+bool ACA_BoundaryActor_Math_Push::IsWithinBounds(const FVector& Position) const
 {
 	return Position.X >= ActualBoundaryMin.X &&
 		   Position.X <= ActualBoundaryMax.X &&
@@ -83,7 +83,7 @@ bool ACA_BoundaryActor_Push::IsWithinBounds(const FVector& Position) const
 		   Position.Y <= ActualBoundaryMax.Y;
 }
 
-float ACA_BoundaryActor_Push::GetDistanceToBoundary(const FVector& Position) const
+float ACA_BoundaryActor_Math_Push::GetDistanceToBoundary(const FVector& Position) const
 {
 	const float DistanceToLeft = Position.X - ActualBoundaryMin.X;
 	const float DistanceToRight = ActualBoundaryMax.X - Position.X;
@@ -94,7 +94,7 @@ float ACA_BoundaryActor_Push::GetDistanceToBoundary(const FVector& Position) con
 		FMath::Min(DistanceToBottom, DistanceToTop));
 }
 
-void ACA_BoundaryActor_Push::DrawDebugBoundaries()
+void ACA_BoundaryActor_Math_Push::DrawDebugBoundaries()
 {
 	const UWorld* World = GetWorld();
 	if (!IsValid(World))
@@ -109,10 +109,10 @@ void ACA_BoundaryActor_Push::DrawDebugBoundaries()
 			World,
 			Vertices[i],
 			Vertices[(i + 1) % Vertices.Num()],
-			BoundaryConfig.DebugBoundaryColor,
+			DebugBoundaryColor,
 			false,
 			-1.f,
 			0,
-			BoundaryConfig.DebugLineThickness);
+			DebugLineThickness);
 	}
 }

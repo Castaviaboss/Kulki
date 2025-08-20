@@ -142,7 +142,7 @@ void ACA_Character::MoveTowardsMouse(const float DeltaTime) const
 void ACA_Character::PhysicalPushCharacter(
 	const FVector& Force,
 	const float PushStrength,
-	const bool bImpulse) const
+	const bool bImpulse)
 {
 	if (!IsValid(GetCapsuleComponent()))
 	{

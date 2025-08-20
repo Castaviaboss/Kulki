@@ -46,6 +46,14 @@ struct FLevelPlaneConfiguration
 	FLinearColor SpriteColor = FLinearColor::White;
 };
 
+UENUM(BlueprintType)
+enum class EBoundaryShapeType : uint8
+{
+	Box		UMETA(DisplayName="Box"),
+	Sphere	UMETA(DisplayName="Sphere"),
+	Custom	UMETA(DisplayName="Custom")
+};
+
 USTRUCT(BlueprintType)
 struct FLevelBoundaryConfiguration
 {
@@ -53,21 +61,18 @@ struct FLevelBoundaryConfiguration
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Level Settings")
 	TSoftClassPtr<ACA_BaseBoundaryActor> BoundaryActorClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Boundaries")
+	EBoundaryShapeType ShapeType = EBoundaryShapeType::Box;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Boundaries")
-	FVector2D ManualBoundaryMin = FVector2D(-1000.0f, -1000.0f);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Box Boundaries", meta=(EditCondition="ShapeType==EBoundaryShapeType::Box"))
+	FVector BoxMin = FVector(-1000.0f, -1000.0f, 0.0f);
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Boundaries")
-	FVector2D ManualBoundaryMax = FVector2D(1000.0f, 1000.0f);
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug")
-	bool bShowDebugBounds = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (EditCondition = "bShowDebugBounds"))
-	FColor DebugBoundaryColor = FColor::Red;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (EditCondition = "bShowDebugBounds"))
-	float DebugLineThickness = 2.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Box Boundaries", meta=(EditCondition="ShapeType==EBoundaryShapeType::Box"))
+	FVector BoxMax = FVector(1000.0f, 1000.0f, 50.0f);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sphere Boundaries", meta=(EditCondition="ShapeType==EBoundaryShapeType::Sphere"))
+	float SphereRadius = 100.f;
 };
 
 UCLASS()

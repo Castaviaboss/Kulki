@@ -33,10 +33,11 @@ protected:
 
 public:
 
+	UFUNCTION(BlueprintCallable)
 	void PhysicalPushCharacter(
 		const FVector& Force,
 		const float PushStrength,
-		const bool bImpulse = true) const;
+		const bool bImpulse = true);
 
 protected:
 

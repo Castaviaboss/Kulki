@@ -73,15 +73,15 @@ void UCA_LevelManagerComponent::SetupPlane(const UCA_LevelData* LevelData, UWorl
 	}
 	
 	const FLevelPlaneConfiguration& Config = LevelData->PlaneConfiguration;
-	if (!Config.SourceSprite.IsValid())
+	if (Config.SourceSprite.IsNull())
 	{
-		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] SourceSprite invalid"), __FUNCTION__);
+		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] SourceSprite null"), __FUNCTION__);
 		return;
 	}
 
-	if (!Config.Material.IsValid())
+	if (Config.Material.IsNull())
 	{
-		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] SpriteComponent invalid"), __FUNCTION__);
+		UE_LOG(LevelManagerLog, Error, TEXT("[%hs] SpriteComponent null"), __FUNCTION__);
 		return;
 	}
 

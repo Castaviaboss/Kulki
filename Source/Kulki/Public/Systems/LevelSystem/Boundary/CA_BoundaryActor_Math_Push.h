@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "CA_BaseBoundaryActor.h"
-#include "CA_BoundaryActor_Push.generated.h"
+#include "CA_BoundaryActor_Math_Push.generated.h"
 
 class ACA_Character;
 
 UCLASS()
-class KULKI_API ACA_BoundaryActor_Push : public ACA_BaseBoundaryActor
+class KULKI_API ACA_BoundaryActor_Math_Push : public ACA_BaseBoundaryActor
 {
 	GENERATED_BODY()
 
@@ -36,14 +36,23 @@ private:
 
 protected:
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Boundaries")
 	float PushActivationDistance = 100.0f;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Boundaries")
 	float PushStrength = 100.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Boundaries")
 	bool bPushWithImpulse = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug")
+	bool bShowDebugBounds = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (EditCondition = "bShowDebugBounds"))
+	FColor DebugBoundaryColor = FColor::Red;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (EditCondition = "bShowDebugBounds"))
+	float DebugLineThickness = 2.0f;
 
 private:
 
@@ -53,8 +62,8 @@ private:
 	TObjectPtr<ACA_Character> Character;
 	
 	UPROPERTY()
-	FVector2D ActualBoundaryMin = FVector2D::ZeroVector;
+	FVector ActualBoundaryMin = FVector::ZeroVector;
 
 	UPROPERTY()
-	FVector2D ActualBoundaryMax = FVector2D::ZeroVector;
+	FVector ActualBoundaryMax = FVector::ZeroVector;
 };
