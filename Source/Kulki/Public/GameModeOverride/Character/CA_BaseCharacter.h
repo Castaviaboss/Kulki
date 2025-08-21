@@ -56,15 +56,15 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnSpeedChanged OnSpeedChanged;
 
-	UPROPERTY(VisibleAnywhere, Category = "Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
 	float CurrentStrength = 1.0f;
 
-	UPROPERTY(VisibleAnywhere, Category = "Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
 	float CurrentSpeed = 1.0f;
 
-	UPROPERTY(VisibleAnywhere, Category = "Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
 	float MassCoefficient = 1.0f;
 
-	UPROPERTY(VisibleAnywhere, Category = "Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
 	float AbsorptionFactor = 1.0f;
 };

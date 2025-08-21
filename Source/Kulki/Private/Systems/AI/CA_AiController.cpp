@@ -17,7 +17,11 @@ void ACA_AiController::InitController(
 		return;
 	}
 
-	RunBehaviorTree(BehaviorTree);
+	if (!RunBehaviorTree(BehaviorTree))
+	{
+		UE_LOG(LogTemp, Error, TEXT("[%hs] Failed run behavior tree"), __FUNCTION__);
+		return;
+	}
 
 	for (const FAiGoalConfiguration& Configuration : GoalData->Goals)
 	{
