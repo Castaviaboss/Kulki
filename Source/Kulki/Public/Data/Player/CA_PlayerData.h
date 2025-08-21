@@ -30,9 +30,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats Settings")
 	float MassCoefficient = 1.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera Settings")
-	float CameraHeightFactor = 1.0f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement Settings")
 	float MaxSpeed = 600.0f;
 	
@@ -41,4 +38,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement Settings")
 	float ForceMultiplier = 600.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera Settings")
+	float OrthoWidth = 512.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera Settings")
+	float TargetArmLenght = 512.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera Settings")
+	float CameraHeightFactor = 0.7f;
 };

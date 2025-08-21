@@ -81,8 +81,11 @@ void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	ForceMultiplier = PlayerData->ForceMultiplier;
 	GetCharacterMovement()->MaxWalkSpeed = PlayerData->MaxSpeed;
 
-	InitialOrthoWidth = CameraComponent->OrthoWidth;
-	InitialTargetArmLenght = SpringArmComponent->TargetArmLength;
+	SpringArmComponent->TargetArmLength = PlayerData->TargetArmLenght;
+	CameraComponent->SetOrthoWidth(PlayerData->OrthoWidth);
+	
+	InitialOrthoWidth = PlayerData->OrthoWidth;
+	InitialTargetArmLenght = PlayerData->TargetArmLenght;
 	InitialScaleAverage = (GetActorScale3D().X + GetActorScale3D().Y + GetActorScale3D().Z) / 3.0f;
 
 	SpeedClamp = PlayerData->ClampSpeedRange;
@@ -311,9 +314,9 @@ void ACA_Character::UpdateScaleFromStrength()
 	
 	const float NewOrthoWidth = (InitialOrthoWidth * ScaleRatio) * PlayerData->CameraHeightFactor;
 	const float NewTargetArmLenght = (InitialTargetArmLenght * ScaleRatio) * PlayerData->CameraHeightFactor;
-
-	CameraComponent->OrthoWidth = NewOrthoWidth;
+	
 	SpringArmComponent->TargetArmLength = NewTargetArmLenght;
+	CameraComponent->OrthoWidth = NewOrthoWidth;
 }
 
 //Stats Calculating
