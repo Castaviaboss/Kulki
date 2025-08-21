@@ -5,6 +5,7 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/SphereComponent.h"
 #include "Data/AI/CA_EnemyCharacterData.h"
+#include "GameModeOverride/Character/CA_Character.h"
 
 ACA_EnemyCharacter::ACA_EnemyCharacter()
 {
@@ -69,52 +70,14 @@ void ACA_EnemyCharacter::InitCharacter(
 
 	const float BaseMassCoefficient = FMath::RandRange(
 		EnemyStats->Configuration.MassCoefficientRange.X, EnemyStats->Configuration.MassCoefficientRange.Y);
-
-	EnemyType = EnemyStats->Configuration.EnemyLeaderStat;
 	
 	SetActorScale3D(FVector(StartStrength));
 	
-	ApplyStartStats(StartStrength, StartSpeed, BaseMassCoefficient, 0);
-}
-
-bool ACA_EnemyCharacter::TryAbsorb(ACA_BaseCharacter* AbsorbInstigator)
-{
-	//TODO Fix this and child
-	if (AbsorbInstigator->CurrentStrength > CurrentStrength)
-	{
-		switch (EnemyType)
-		{
-			case EEnemyType::None: break;
-			case EEnemyType::Red:
-				AbsorbInstigator->AddStrength(CurrentStrength); break;
-			case EEnemyType::Yellow:
-				AbsorbInstigator->AddSpeed(CurrentSpeed); break;
-			case EEnemyType::Purple:
-				AbsorbInstigator->ReduceStrength(CurrentStrength);
-				AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
-		}
-		Destroy();
-		return true;
-	}
-
-	switch (EnemyType)
-	{
-		case EEnemyType::None: break;
-		case EEnemyType::Red:
-			AbsorbInstigator->ReduceStrength(CurrentStrength); break;
-		case EEnemyType::Yellow:
-			AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
-		case EEnemyType::Purple:
-			AbsorbInstigator->ReduceStrength(CurrentStrength);
-			AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
-	}
-
-	return false;
-}
-
-void ACA_EnemyCharacter::UpdateSpeed()
-{
-	Super::UpdateSpeed();
-
+	ApplyStartStats(StartStrength, StartSpeed, BaseMassCoefficient);
 	
+	AbsorptionCoefficient = EnemyStats->Configuration.AbsorptionCoefficient;
+	EnemyType = EnemyStats->Configuration.EnemyType;
+
+	SpeedClamp = EnemyStats->Configuration.ClampSpeedRange;
+	StrengthClamp = EnemyStats->Configuration.ClampStrengthRange;
 }

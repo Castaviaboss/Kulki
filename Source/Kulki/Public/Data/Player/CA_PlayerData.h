@@ -19,19 +19,16 @@ public:
 	float StartStrength = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats Settings")
-	FVector2D AvailableStrengthRange = FVector2D(1.0f, 1.0f);
+	FVector2D ClampStrengthRange = FVector2D(1.0f, 1.0f);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats Settings")
 	float StartSpeed = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats Settings")
-	FVector2D AvailableSpeedRange = FVector2D(1.0f, 1.0f);
+	FVector2D ClampSpeedRange = FVector2D(1.0f, 1.0f);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats Settings")
 	float MassCoefficient = 1.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats Settings")
-	float AbsorptionFactor = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera Settings")
 	float CameraHeightFactor = 1.0f;

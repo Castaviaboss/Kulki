@@ -6,6 +6,7 @@
 #include "CA_BaseCharacter.h"
 #include "CA_Character.generated.h"
 
+class ACA_EnemyCharacter;
 class UCA_PlayerData;
 class USpringArmComponent;
 class UCameraComponent;
@@ -13,10 +14,6 @@ class UCA_HeroComponent;
 class UCA_InputData;
 class UInputMappingContext;
 class ACA_PlayerController;
-
-DECLARE_LOG_CATEGORY_EXTERN(CharacterLog, Log, All);
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyAbsorbed, EEnemyType, AbsorbedEnemyType);
 
 UCLASS()
 class KULKI_API ACA_Character : public ACA_BaseCharacter
@@ -27,11 +24,19 @@ protected:
 	
 	ACA_Character();
 
+//AActor
+	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void Tick(float DeltaSeconds) override;
 
+//AActor
+
+//Input
+
 	void SetMappingContext(const UInputMappingContext* MappingContext, const int32 Priority = 0) const;
+
+//Input
 
 //Movement
 	
@@ -47,11 +52,15 @@ protected:
 
 public:
 
+//Physic
+
 	UFUNCTION(BlueprintCallable)
 	void PhysicalPushCharacter(
 		const FVector& Force,
 		const float PushStrength,
 		const bool bImpulse = true);
+	
+//Physic
 
 	virtual void NotifyHit(
 		class UPrimitiveComponent* MyComp,
@@ -63,11 +72,13 @@ public:
 		FVector NormalImpulse,
 		const FHitResult& Hit) override;
 
+	void AbsorbEnemy(const ACA_EnemyCharacter* Enemy);
+
+	void PlayerAbsorbed(const ACA_EnemyCharacter* Enemy);
+
 //Stats Calculating
 
-	virtual void AddStrength(const float StrengthToAdd) override;
-
-	virtual void ReduceStrength(const float StrengthToReduce) override;
+	virtual void UpdateStrengthModification() override;
 
 //Stats Calculating
 
@@ -82,19 +93,16 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<ACA_PlayerController> PlayerController;
 
-	UPROPERTY(BlueprintAssignable)
-	FOnEnemyAbsorbed OnEnemyAbsorbed;
-
 protected:
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(Transient, BlueprintReadOnly)
 	TObjectPtr<UCA_PlayerData> PlayerData;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
-	float MaxForce = 600.0f;
+	UPROPERTY(Transient, EditAnywhere, BlueprintReadWrite, Category="Movement")
+	float MaxForce = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
-	float ForceMultiplier = 600.0f;
+	UPROPERTY(Transient, EditAnywhere, BlueprintReadWrite, Category="Movement")
+	float ForceMultiplier = 0.0f;
 
 private:
 

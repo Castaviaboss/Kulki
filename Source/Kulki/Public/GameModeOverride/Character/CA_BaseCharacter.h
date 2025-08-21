@@ -10,6 +10,9 @@ enum class EEnemyType : uint8;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStrengthChanged, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpeedChanged, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyAbsorbed, EEnemyType, AbsorbedTargetType);
+
+DECLARE_LOG_CATEGORY_EXTERN(CharacterLog, Log, All);
 
 UCLASS()
 class KULKI_API ACA_BaseCharacter : public APaperCharacter
@@ -20,35 +23,41 @@ public:
 	
 	ACA_BaseCharacter();
 
-protected:
+//Stats Calculating
 
 	void ApplyStartStats(
 		const float StartStrength,
 		const float StartSpeed,
-		const float BaseMassCoefficient,
-		const float BaseAbsorptionFactor);
-
-public:
-
-	virtual bool TryAbsorb(ACA_BaseCharacter* AbsorbInstigator) { return true; }
-
-	//Stats Calculating
+		const float BaseMassCoefficient);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void AddStrength(const float StrengthToAdd);
+	virtual void AddStrength(
+		const float StrengthToAdd,
+		const float StrengthModifier);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void AddSpeed(const float SpeedToAdd);
+	virtual void AddSpeed(
+		const float SpeedToAdd,
+		const float SpeedModifier);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ReduceStrength(const float StrengthToReduce);
+	virtual void ReduceStrength(
+		const float StrengthToReduce,
+		const float StrengthModifier);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ReduceSpeed(const float SpeedToReduce);
+	virtual void ReduceSpeed(
+		const float SpeedToReduce,
+		const float SpeedModifier);
+	
+	virtual void UpdateStrengthModification() {}
 
-	//Stats Calculating
+	virtual void UpdateSpeedModification() {}
 
-	virtual void UpdateSpeed();
+//Stats Calculating
+
+	UPROPERTY(BlueprintAssignable)
+	FOnEnemyAbsorbed OnTargetAbsorbed;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnStrengthChanged OnStrengthChanged;
@@ -56,17 +65,18 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnSpeedChanged OnSpeedChanged;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
-	float CurrentStrength = 1.0f;
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
+	float CurrentStrength = 0.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
-	float CurrentSpeed = 1.0f;
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
+	float CurrentSpeed = 0.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
-	float MassCoefficient = 1.0f;
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
+	float MassCoefficient = 0.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
-	float AbsorptionFactor = 1.0f;
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
+	FVector2D StrengthClamp = FVector2D::ZeroVector;
 
-	//TODO Factor replace to Coefficient
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
+	FVector2D SpeedClamp = FVector2D::ZeroVector;
 };

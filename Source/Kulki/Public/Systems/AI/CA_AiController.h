@@ -10,6 +10,7 @@
 class ACA_EnemyCharacter;
 enum class EEnemyAIState : uint8;
 class UCA_AiGoalData;
+class UCA_GoalProcessor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGoalUpdated);
 
@@ -23,9 +24,11 @@ public:
 	virtual void InitController(
 		UCA_AiGoalData* GoalData,
 		ACA_EnemyCharacter* OwnerPawn);
-
+	
 	UFUNCTION(BlueprintCallable)
-	void UpdateGoal(const EEnemyAIState NewGoal);
+	void UpdateGoal(
+		const EEnemyAIState NewGoal,
+		const UCA_GoalProcessor* GoalInstigator);
 
 	UFUNCTION(BlueprintPure)
 	EEnemyAIState& GetCurrentGoal() {return CurrentGoal;};
@@ -35,10 +38,10 @@ protected:
 	UPROPERTY(BlueprintAssignable)
 	FOnGoalUpdated OnGoalUpdated;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	EEnemyAIState CurrentGoal = EEnemyAIState::Patrolling;
+	UPROPERTY(Transient,VisibleAnywhere, BlueprintReadOnly)
+	EEnemyAIState CurrentGoal = EEnemyAIState::None;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Transient, EditAnywhere)
 	TObjectPtr<UBehaviorTree> BehaviorTree;
 
 private:

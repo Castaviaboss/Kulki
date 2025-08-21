@@ -21,7 +21,7 @@ struct FEnemyStatsConfiguration
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	EEnemyType EnemyLeaderStat = EEnemyType::Red;
+	EEnemyType EnemyType = EEnemyType::Red;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FVector2D StartStrengthRange = FVector2D(1.0f,1.0f);
@@ -34,6 +34,15 @@ struct FEnemyStatsConfiguration
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FVector2D SpawnRadiusMultiplierRange = FVector2D(1.0f, 1.0f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FVector2D ClampStrengthRange = FVector2D(1.0f, 1.0f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FVector2D ClampSpeedRange = FVector2D(1.0f, 1.0f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float AbsorptionCoefficient = 1.0f;
 };
 
 UCLASS()

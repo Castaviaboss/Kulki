@@ -25,13 +25,12 @@ public:
 		UCA_EnemyCharacterData* Config,
 		const float SpawnRadiusMultiplier);
 
-	virtual bool TryAbsorb(ACA_BaseCharacter* AbsorbInstigator) override;
-
-	virtual void UpdateSpeed() override;
-
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<USphereComponent> SphereDetector;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(Transient,BlueprintReadOnly)
 	EEnemyType EnemyType = EEnemyType::Red;
+
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
+	float AbsorptionCoefficient = 0.0f;
 };

@@ -15,8 +15,6 @@
 #include "Kulki/Public/GameModeOverride/PlayerController/CA_PlayerController.h"
 #include "Systems/AI/EnemyPawn/CA_EnemyCharacter.h"
 
-DEFINE_LOG_CATEGORY(CharacterLog);
-
 ACA_Character::ACA_Character()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -87,11 +85,13 @@ void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	InitialTargetArmLenght = SpringArmComponent->TargetArmLength;
 	InitialScaleAverage = (GetActorScale3D().X + GetActorScale3D().Y + GetActorScale3D().Z) / 3.0f;
 
+	SpeedClamp = PlayerData->ClampSpeedRange;
+	StrengthClamp = PlayerData->ClampStrengthRange;
+	
 	ApplyStartStats(
 		PlayerData->StartStrength,
 		PlayerData->StartSpeed,
-		PlayerData->MassCoefficient,
-		PlayerData->AbsorptionFactor);
+		PlayerData->MassCoefficient);
 
 	UpdateScaleFromStrength();
 }
@@ -226,28 +226,65 @@ void ACA_Character::NotifyHit(
 	
 	if (ACA_EnemyCharacter* Enemy = Cast<ACA_EnemyCharacter>(Other))
 	{
-		const EEnemyType TypeStat = Enemy->EnemyType;
-		if (Enemy->TryAbsorb(this))
+		constexpr float Tolerance = 1e-4f;
+		if (CurrentStrength - Enemy->CurrentStrength > Tolerance)
 		{
-			if (OnEnemyAbsorbed.IsBound())
+			AbsorbEnemy(Enemy);
+			if (OnTargetAbsorbed.IsBound())
 			{
-				OnEnemyAbsorbed.Broadcast(TypeStat);
+				OnTargetAbsorbed.Broadcast(Enemy->EnemyType);
 			}
+			
+			Enemy->Destroy();
 		}
+		else
+		{
+			PlayerAbsorbed(Enemy);
+		}
+	}
+}
+
+void ACA_Character::AbsorbEnemy(const ACA_EnemyCharacter* Enemy)
+{
+	switch (Enemy->EnemyType)
+	{
+		case EEnemyType::Red:
+			AddStrength(Enemy->CurrentStrength, Enemy->AbsorptionCoefficient);
+			break;
+		case EEnemyType::Yellow:
+			AddSpeed(Enemy->CurrentSpeed, Enemy->AbsorptionCoefficient);
+			break;
+		case EEnemyType::Purple:
+			ReduceStrength(Enemy->CurrentStrength, Enemy->AbsorptionCoefficient);
+			ReduceSpeed(Enemy->CurrentSpeed, Enemy->AbsorptionCoefficient);
+			break;
+		default: break;
+	}
+}
+
+void ACA_Character::PlayerAbsorbed(const ACA_EnemyCharacter* Enemy)
+{
+	switch (Enemy->EnemyType)
+	{
+		case EEnemyType::Red:
+			ReduceStrength(Enemy->CurrentStrength, Enemy->AbsorptionCoefficient);
+			break;
+		case EEnemyType::Yellow:
+			ReduceSpeed(Enemy->CurrentSpeed, Enemy->AbsorptionCoefficient);
+			break;
+		case EEnemyType::Purple:
+			ReduceStrength(Enemy->CurrentStrength, Enemy->AbsorptionCoefficient);
+			ReduceSpeed(Enemy->CurrentSpeed, Enemy->AbsorptionCoefficient);
+			break;
+		default: break;
 	}
 }
 
 //Stats Calculating
 
-void ACA_Character::AddStrength(const float StrengthToAdd)
+void ACA_Character::UpdateStrengthModification()
 {
-	Super::AddStrength(StrengthToAdd);
-	UpdateScaleFromStrength();
-}
-
-void ACA_Character::ReduceStrength(const float StrengthToReduce)
-{
-	Super::ReduceStrength(StrengthToReduce);
+	Super::UpdateStrengthModification();
 	UpdateScaleFromStrength();
 }
 
@@ -255,12 +292,6 @@ void ACA_Character::ReduceStrength(const float StrengthToReduce)
 
 void ACA_Character::UpdateScaleFromStrength()
 {
-	if (CurrentStrength >= PlayerData->AvailableStrengthRange.Y
-		|| CurrentStrength <= PlayerData->AvailableStrengthRange.X)
-	{
-		return;
-	}
-	
 	if (!IsValid(CameraComponent))
 	{
 		UE_LOG(CharacterLog, Error, TEXT("[%hs] CameraComponent invalid"), __FUNCTION__);

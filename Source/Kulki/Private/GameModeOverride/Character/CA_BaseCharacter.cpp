@@ -2,7 +2,7 @@
 
 #include "GameModeOverride/Character/CA_BaseCharacter.h"
 
-#include "GameFramework/CharacterMovementComponent.h"
+DEFINE_LOG_CATEGORY(CharacterLog);
 
 ACA_BaseCharacter::ACA_BaseCharacter()
 {
@@ -12,21 +12,24 @@ ACA_BaseCharacter::ACA_BaseCharacter()
 void ACA_BaseCharacter::ApplyStartStats(
 	const float StartStrength,
 	const float StartSpeed,
-	const float BaseMassCoefficient,
-	const float BaseAbsorptionFactor)
+	const float BaseMassCoefficient)
 {
 	CurrentStrength = StartStrength;
 	CurrentSpeed = StartSpeed;
 	MassCoefficient = BaseMassCoefficient;
-	AbsorptionFactor = BaseAbsorptionFactor;
-
-	UpdateSpeed();
 }
 
-void ACA_BaseCharacter::AddStrength(const float StrengthToAdd)
+void ACA_BaseCharacter::AddStrength(
+	const float StrengthToAdd,
+	const float StrengthModifier)
 {
-	CurrentStrength += StrengthToAdd * AbsorptionFactor;
+	CurrentStrength += StrengthToAdd * StrengthModifier;
 	CurrentSpeed -= StrengthToAdd * MassCoefficient;
+
+	CurrentStrength = FMath::Clamp(CurrentStrength, StrengthClamp.X, StrengthClamp.Y);
+	CurrentSpeed = FMath::Clamp(CurrentSpeed, SpeedClamp.X, SpeedClamp.Y);
+
+	UpdateStrengthModification();
 	
 	if (OnStrengthChanged.IsBound())
 	{
@@ -34,10 +37,32 @@ void ACA_BaseCharacter::AddStrength(const float StrengthToAdd)
 	}
 }
 
-void ACA_BaseCharacter::ReduceStrength(const float StrengthToReduce)
+void ACA_BaseCharacter::AddSpeed(
+	const float SpeedToAdd,
+	const float SpeedModifier)
 {
-	CurrentStrength -= StrengthToReduce * AbsorptionFactor;
+	CurrentSpeed += SpeedToAdd * SpeedModifier;
+	CurrentSpeed = FMath::Clamp(CurrentSpeed, SpeedClamp.X, SpeedClamp.Y);
+	
+	UpdateSpeedModification();
+	
+	if (OnSpeedChanged.IsBound())
+	{
+		OnSpeedChanged.Broadcast(CurrentSpeed);
+	}
+}
+
+void ACA_BaseCharacter::ReduceStrength(
+	const float StrengthToReduce,
+	const float StrengthModifier)
+{
+	CurrentStrength -= StrengthToReduce * StrengthModifier;
 	CurrentSpeed += StrengthToReduce * MassCoefficient;
+
+	CurrentStrength = FMath::Clamp(CurrentStrength, StrengthClamp.X, StrengthClamp.Y);
+	CurrentSpeed = FMath::Clamp(CurrentSpeed, SpeedClamp.X, SpeedClamp.Y);
+
+	UpdateStrengthModification();
 	
 	if (OnStrengthChanged.IsBound())
 	{
@@ -45,32 +70,18 @@ void ACA_BaseCharacter::ReduceStrength(const float StrengthToReduce)
 	}
 }
 
-void ACA_BaseCharacter::AddSpeed(const float SpeedToAdd)
+void ACA_BaseCharacter::ReduceSpeed(
+	const float SpeedToReduce,
+	const float SpeedModifier)
 {
-	CurrentSpeed += SpeedToAdd * AbsorptionFactor;
-	CurrentSpeed = FMath::Min(CurrentSpeed, GetCharacterMovement()->GetMaxSpeed());
+	CurrentSpeed -= SpeedToReduce * SpeedModifier;
+	CurrentSpeed = FMath::Clamp(CurrentSpeed, SpeedClamp.X, SpeedClamp.Y);
 
-	UpdateSpeed();
-	if (OnSpeedChanged.IsBound())
-	{
-		OnSpeedChanged.Broadcast(CurrentSpeed);
-	}
-}
-
-void ACA_BaseCharacter::ReduceSpeed(const float SpeedToReduce)
-{
-	CurrentSpeed -= SpeedToReduce * AbsorptionFactor;
-	CurrentSpeed = FMath::Max(CurrentSpeed, 0);
-
-	UpdateSpeed();
-	if (OnSpeedChanged.IsBound())
-	{
-		OnSpeedChanged.Broadcast(CurrentSpeed);
-	}
-}
-
-void ACA_BaseCharacter::UpdateSpeed()
-{
+	UpdateSpeedModification();
 	
+	if (OnSpeedChanged.IsBound())
+	{
+		OnSpeedChanged.Broadcast(CurrentSpeed);
+	}
 }
 

@@ -4,7 +4,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/Character.h"
-#include "Systems/AI/CA_BaseProcessor.h"
+#include "Systems/AI/CA_GoalProcessor.h"
 #include "Systems/AI/EnemyPawn/CA_EnemyCharacter.h"
 
 void ACA_AiController::InitController(
@@ -31,19 +31,20 @@ void ACA_AiController::InitController(
 			continue;
 		}
 
-		TSubclassOf<UCA_BaseProcessor> ProcessorClass = Configuration.GoalProcessorClass.LoadSynchronous();
+		TSubclassOf<UCA_GoalProcessor> ProcessorClass = Configuration.GoalProcessorClass.LoadSynchronous();
 		if (!IsValid(ProcessorClass))
 		{
 			UE_LOG(LogTemp, Error, TEXT("[%hs] ProcessorClass invalid"), __FUNCTION__);
 			return;
 		}
 
-		UCA_BaseProcessor* Processor = NewObject<UCA_BaseProcessor>(this, ProcessorClass);
+		UCA_GoalProcessor* Processor = NewObject<UCA_GoalProcessor>(this, ProcessorClass);
 		if (!IsValid(Processor))
 		{
 			UE_LOG(LogTemp, Error, TEXT("[%hs] Processor invalid"), __FUNCTION__);
 			return;
 		}
+		Processor->SetPriority(Configuration.GoalPriority);
 		Processor->InitProcessor(this, this, OwnerPawn);
 	}
 
@@ -56,8 +57,16 @@ void ACA_AiController::InitController(
 	GetBlackboardComponent()->SetValueAsObject(PlayerKey, GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
-void ACA_AiController::UpdateGoal(const EEnemyAIState NewGoal)
+void ACA_AiController::UpdateGoal(
+	const EEnemyAIState NewGoal,
+	const UCA_GoalProcessor* GoalInstigator)
 {
+	if (!IsValid(GoalInstigator))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%hs] GoalInstigator is invalid"), __FUNCTION__);
+		return;
+	}
+	
 	CurrentGoal = NewGoal;
 	
 	if (!IsValid(GetBlackboardComponent()))
