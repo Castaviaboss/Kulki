@@ -31,6 +31,9 @@ struct FEnemyStatsConfiguration
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FVector2D MassCoefficientRange = FVector2D(1.0f,1.0f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FVector2D SpawnRadiusMultiplierRange = FVector2D(1.0f, 1.0f);
 };
 
 UCLASS()

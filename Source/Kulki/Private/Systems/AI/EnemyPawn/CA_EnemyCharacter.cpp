@@ -16,7 +16,7 @@ ACA_EnemyCharacter::ACA_EnemyCharacter()
 
 void ACA_EnemyCharacter::InitCharacter(
 	UCA_EnemyCharacterData* Config,
-	AActor* CenterOfSpawn)
+	const float SpawnRadiusMultiplier)
 {
 	if (!IsValid(Config))
 	{
@@ -62,10 +62,10 @@ void ACA_EnemyCharacter::InitCharacter(
 	}
 
 	const float StartStrength = FMath::RandRange(
-		EnemyStats->Configuration.StartStrengthRange.X, EnemyStats->Configuration.StartStrengthRange.Y);
+		EnemyStats->Configuration.StartStrengthRange.X, EnemyStats->Configuration.StartStrengthRange.Y) * SpawnRadiusMultiplier;
 
 	const float StartSpeed = FMath::RandRange(
-		EnemyStats->Configuration.StartSpeedRange.X, EnemyStats->Configuration.StartSpeedRange.Y);
+		EnemyStats->Configuration.StartSpeedRange.X, EnemyStats->Configuration.StartSpeedRange.Y) * SpawnRadiusMultiplier;
 
 	const float BaseMassCoefficient = FMath::RandRange(
 		EnemyStats->Configuration.MassCoefficientRange.X, EnemyStats->Configuration.MassCoefficientRange.Y);

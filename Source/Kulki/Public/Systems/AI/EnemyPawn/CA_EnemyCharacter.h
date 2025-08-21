@@ -23,7 +23,7 @@ public:
 
 	virtual void InitCharacter(
 		UCA_EnemyCharacterData* Config,
-		AActor* CenterOfSpawn);
+		const float SpawnRadiusMultiplier);
 
 	virtual bool TryAbsorb(ACA_BaseCharacter* AbsorbInstigator) override;
 

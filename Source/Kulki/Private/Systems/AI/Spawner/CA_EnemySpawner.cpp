@@ -7,6 +7,7 @@
 #include "Algo/RandomShuffle.h"
 #include "Data/CA_GameData.h"
 #include "Data/AI/CA_AiSpawnData.h"
+#include "Data/AI/CA_EnemyCharacterData.h"
 #include "GameModeOverride/GameState/CA_GameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Systems/AI/CA_AiController.h"
@@ -145,7 +146,13 @@ void ACA_EnemySpawner::TrySpawnEnemy()
 			return;
 		}
 
-		Enemy->InitCharacter(SelectedSetting.CharacterData, CenterOfSpawn);
+		float RadiusMultiplier = FMath::GetMappedRangeValueClamped(
+	SpawnData->SpawnRadiusRange,
+	SelectedSetting.CharacterData->EnemyStats->Configuration.SpawnRadiusMultiplierRange,
+			Distance
+		);
+		
+		Enemy->InitCharacter(SelectedSetting.CharacterData, RadiusMultiplier);
 
 		if (!Enemy->GetController())
 		{
