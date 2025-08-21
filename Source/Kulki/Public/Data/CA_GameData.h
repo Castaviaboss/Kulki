@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "CA_GameData.generated.h"
 
+class UCA_GameStateData;
 class UCA_PlayerData;
 class UCA_AiSpawnData;
 class UCA_LevelData;
@@ -29,4 +30,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCA_PlayerData> PlayerData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCA_GameStateData> GameStateData;
 };

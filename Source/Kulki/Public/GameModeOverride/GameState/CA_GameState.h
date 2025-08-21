@@ -31,11 +31,6 @@ public:
 	UPROPERTY()
 	TObjectPtr<ACA_ProcessorTickManager> TickManager;
 
-protected:
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCA_BaseProcessor> GameStateProcessor;
-
 private:
 
 	UPROPERTY()
