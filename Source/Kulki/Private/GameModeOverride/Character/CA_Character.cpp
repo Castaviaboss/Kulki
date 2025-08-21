@@ -90,6 +90,8 @@ void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	SpeedClamp = PlayerData->ClampSpeedRange;
 	StrengthClamp = PlayerData->ClampStrengthRange;
+
+	ForceDestroyEnemyOnHit = PlayerData->ForceDestroyEnemyOnHit;
 	
 	ApplyStartStats(
 		PlayerData->StartStrength,
@@ -243,6 +245,11 @@ void ACA_Character::NotifyHit(
 		else
 		{
 			PlayerAbsorbed(Enemy);
+
+			if (ForceDestroyEnemyOnHit)
+			{
+				Enemy->Destroy();
+			}
 		}
 	}
 }

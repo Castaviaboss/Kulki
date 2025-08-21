@@ -113,4 +113,6 @@ private:
 	float InitialTargetArmLenght;
 
 	float InitialScaleAverage;
+
+	bool ForceDestroyEnemyOnHit = false;
 };

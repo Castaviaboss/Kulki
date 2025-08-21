@@ -64,4 +64,6 @@ private:
 	const float MaxChanceToSpawn = 100.0f;
 
 	const float DefaultBestOptionValue = -1.0f;
+
+	const float DefaultLocationZ = 17.5;
 };

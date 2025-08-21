@@ -47,4 +47,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera Settings")
 	float CameraHeightFactor = 0.7f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hit Settings")
+	bool ForceDestroyEnemyOnHit = false;
 };

@@ -131,6 +131,7 @@ void ACA_EnemySpawner::TrySpawnEnemy()
 	FNavLocation NavLocation;
 	if (NavigationSystem->ProjectPointToNavigation(CandidateLocation, NavLocation))
 	{
+		NavLocation.Location.Z = DefaultLocationZ;
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
