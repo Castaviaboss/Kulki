@@ -26,7 +26,7 @@ struct FAiGoalConfiguration
 	EEnemyAIState AiStateType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCA_BaseProcessor> GoalProcessor;
+	TSoftClassPtr<UCA_BaseProcessor> GoalProcessorClass;
 };
 
 UCLASS()

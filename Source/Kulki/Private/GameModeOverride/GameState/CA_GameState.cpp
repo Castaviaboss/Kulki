@@ -8,6 +8,7 @@
 #include "GameModeOverride/Character/CA_BaseCharacter.h"
 #include "Kulki/Public/Systems/LevelSystem/CA_LevelManagerComponent.h"
 #include "Systems/AI/CA_BaseProcessor.h"
+#include "Systems/Processor/CA_GameStateProcessor.h"
 
 DEFINE_LOG_CATEGORY(GameStateLog);
 
@@ -43,12 +44,6 @@ void ACA_GameState::BeginPlay()
 		UE_LOG(GameStateLog, Error, TEXT("[%hs] GameStateData invalid"), __FUNCTION__);
 		return;
 	}
-	
-	if (!IsValid(GameStateData->GameStateProcessor))
-	{
-		UE_LOG(GameStateLog, Error, TEXT("[%hs] GameStateProcessor invalid"), __FUNCTION__);
-		return;
-	}
 
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (!IsValid(PlayerController))
@@ -63,8 +58,28 @@ void ACA_GameState::BeginPlay()
 		UE_LOG(GameStateLog, Error, TEXT("[%hs] Character invalid"), __FUNCTION__);
 		return;
 	}
+
+	if (GameStateData->GameStateProcessorClass.IsNull())
+	{
+		UE_LOG(GameStateLog, Error, TEXT("[%hs] GameStateProcessorClass is null"), __FUNCTION__);
+		return;
+	}
+
+	TSubclassOf<UCA_GameStateProcessor> ProcessorClass = GameStateData->GameStateProcessorClass.LoadSynchronous();
+	if (!IsValid(ProcessorClass))
+	{
+		UE_LOG(GameStateLog, Error, TEXT("[%hs] ProcessorClass invalid"), __FUNCTION__);
+		return;
+	}
+
+	UCA_GameStateProcessor* Processor = NewObject<UCA_GameStateProcessor>(this, ProcessorClass);
+	if (!IsValid(Processor))
+	{
+		UE_LOG(GameStateLog, Error, TEXT("[%hs] Processor invalid"), __FUNCTION__);
+		return;
+	}
 	
-	GameStateData->GameStateProcessor->InitProcessor(this, PlayerController, Character);
+	Processor->InitProcessor(this, PlayerController, Character);
 }
 
 void ACA_GameState::SetEnemySpawner(ACA_EnemySpawner* Spawner)

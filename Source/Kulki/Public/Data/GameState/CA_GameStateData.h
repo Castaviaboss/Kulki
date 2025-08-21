@@ -6,7 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "CA_GameStateData.generated.h"
 
-class UCA_BaseProcessor;
+class UCA_GameStateProcessor;
 
 UCLASS(Blueprintable)
 class KULKI_API UCA_GameStateData : public UDataAsset
@@ -19,5 +19,5 @@ public:
 	int32 EnemiesCountMustBeAbsorbed = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCA_BaseProcessor> GameStateProcessor;
+	TSoftClassPtr<UCA_GameStateProcessor> GameStateProcessorClass;
 };

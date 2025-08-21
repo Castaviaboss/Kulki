@@ -21,13 +21,26 @@ void ACA_AiController::InitController(
 
 	for (const FAiGoalConfiguration& Configuration : GoalData->Goals)
 	{
-		if (!IsValid(Configuration.GoalProcessor))
+		if (Configuration.GoalProcessorClass.IsNull())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("[%hs] GoalProcessor invalid"), __FUNCTION__);
+			UE_LOG(LogTemp, Warning, TEXT("[%hs] GoalProcessor is null"), __FUNCTION__);
 			continue;
 		}
 
-		Configuration.GoalProcessor->InitProcessor(this, this, OwnerPawn);
+		TSubclassOf<UCA_BaseProcessor> ProcessorClass = Configuration.GoalProcessorClass.LoadSynchronous();
+		if (!IsValid(ProcessorClass))
+		{
+			UE_LOG(LogTemp, Error, TEXT("[%hs] ProcessorClass invalid"), __FUNCTION__);
+			return;
+		}
+
+		UCA_BaseProcessor* Processor = NewObject<UCA_BaseProcessor>(this, ProcessorClass);
+		if (!IsValid(Processor))
+		{
+			UE_LOG(LogTemp, Error, TEXT("[%hs] Processor invalid"), __FUNCTION__);
+			return;
+		}
+		Processor->InitProcessor(this, this, OwnerPawn);
 	}
 
 	if (!IsValid(GetBlackboardComponent()))

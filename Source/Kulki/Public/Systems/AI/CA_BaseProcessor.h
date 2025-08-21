@@ -9,7 +9,7 @@
 class ACA_BaseCharacter;
 class ACA_AiController;
 
-UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced, meta = (ShowWorldContextPin), Abstract)
+UCLASS(Blueprintable, meta = (ShowWorldContextPin), Abstract)
 class KULKI_API UCA_BaseProcessor : public UObject
 {
 	GENERATED_BODY()
