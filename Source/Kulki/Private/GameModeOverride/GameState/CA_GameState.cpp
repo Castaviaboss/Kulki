@@ -22,3 +22,8 @@ void ACA_GameState::BeginPlay()
 	}
 	LevelManager->InitManager();
 }
+
+void ACA_GameState::SetEnemySpawner(ACA_EnemySpawner* Spawner)
+{
+	EnemySpawner = Spawner;
+}

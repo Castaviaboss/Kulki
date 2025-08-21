@@ -6,6 +6,7 @@
 #include "GameFramework/GameState.h"
 #include "CA_GameState.generated.h"
 
+class ACA_EnemySpawner;
 class ACA_ProcessorTickManager;
 class UCA_LevelManagerComponent;
 
@@ -24,6 +25,8 @@ protected:
 
 public:
 
+	void SetEnemySpawner(ACA_EnemySpawner* Spawner);
+
 	UPROPERTY()
 	TObjectPtr<ACA_ProcessorTickManager> TickManager;
 
@@ -31,4 +34,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UCA_LevelManagerComponent> LevelManager;
+
+	UPROPERTY()
+	TObjectPtr<ACA_EnemySpawner> EnemySpawner;
 };

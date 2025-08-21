@@ -7,12 +7,17 @@
 #include "Engine/DataAsset.h"
 #include "CA_EnemyCharacterData.generated.h"
 
+class UCA_EnemyStatsData;
+
 UCLASS()
 class KULKI_API UCA_EnemyCharacterData : public UDataAsset
 {
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCA_EnemyStatsData> EnemyStats;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UPaperFlipbook> SourceFlipbook;

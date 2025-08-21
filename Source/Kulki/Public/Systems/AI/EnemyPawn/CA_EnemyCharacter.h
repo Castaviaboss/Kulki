@@ -3,14 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PaperCharacter.h"
+#include "Data/CA_EnemyStatsData.h"
+#include "GameModeOverride/Character/CA_BaseCharacter.h"
 #include "CA_EnemyCharacter.generated.h"
 
+enum class EEnemyLeaderStats : uint8;
+class UCA_HeroComponent;
 class UCA_EnemyCharacterData;
 class USphereComponent;
 
 UCLASS()
-class KULKI_API ACA_EnemyCharacter : public APaperCharacter
+class KULKI_API ACA_EnemyCharacter : public ACA_BaseCharacter
 {
 	GENERATED_BODY()
 
@@ -22,6 +25,13 @@ public:
 		UCA_EnemyCharacterData* Config,
 		AActor* CenterOfSpawn);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	virtual bool TryAbsorb(ACA_BaseCharacter* AbsorbInstigator) override;
+
+	virtual void UpdateSpeed() override;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<USphereComponent> SphereDetector;
+
+	UPROPERTY(BlueprintReadOnly)
+	EEnemyLeaderStats LeaderStat = EEnemyLeaderStats::Strength;
 };

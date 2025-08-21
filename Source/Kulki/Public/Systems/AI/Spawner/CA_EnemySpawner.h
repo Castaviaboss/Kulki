@@ -12,6 +12,8 @@ class UCA_AiSpawnData;
 
 DECLARE_LOG_CATEGORY_EXTERN(SpawnerLog, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemySpawned, int32, NewCount);
+
 UCLASS()
 class KULKI_API ACA_EnemySpawner : public AActor
 {
@@ -36,6 +38,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 CountSpawnedEnemies = 0;
+
+public:
+
+	UPROPERTY(BlueprintAssignable)
+	FOnEnemySpawned OnEnemySpawned;
 
 private:
 

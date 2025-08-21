@@ -7,6 +7,7 @@
 #include "Algo/RandomShuffle.h"
 #include "Data/CA_GameData.h"
 #include "Data/AI/CA_AiSpawnData.h"
+#include "GameModeOverride/GameState/CA_GameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Systems/AI/CA_AiController.h"
 #include "Systems/AI/EnemyPawn/CA_EnemyCharacter.h"
@@ -30,6 +31,14 @@ void ACA_EnemySpawner::BeginPlay()
 	}
 
 	const UCA_GameInstance* GameInstance = CastChecked<UCA_GameInstance>(World->GetGameInstance());
+
+	ACA_GameState* GameState = Cast<ACA_GameState>(World->GetGameState());
+	if (!IsValid(GameState))
+	{
+		UE_LOG(SpawnerLog, Error, TEXT("[%hs] GameState invalid"), __FUNCTION__);
+		return;
+	}
+	GameState->SetEnemySpawner(this);
 
 	const UCA_GameData* GameData = GameInstance->GameData;
 	if (!IsValid(GameData))
@@ -150,22 +159,27 @@ void ACA_EnemySpawner::TrySpawnEnemy()
 			return;
 		}
 		AiController->InitController(SelectedSetting.EnemyGoal, Enemy);
+
+		if (SpawnData->bUseSpawnCounter)
+		{
+			CountSpawnedEnemies++;
+		}
+
+		if (OnEnemySpawned.IsBound())
+		{
+			OnEnemySpawned.Broadcast(CountSpawnedEnemies);
+		}
 	}
 	else
 	{
 		UE_LOG(SpawnerLog, Warning, TEXT("[%hs] Failed spawn enemy"), __FUNCTION__);
 	}
 
-	if (SpawnData->bUseSpawnCounter)
+	if (CountSpawnedEnemies >= SpawnData->CountMustBeSpawned)
 	{
-		CountSpawnedEnemies++;
-
-		if (CountSpawnedEnemies >= SpawnData->CountMustBeSpawned)
-		{
-			return;
-		}
+		return;
 	}
-
+	
 	StartSpawnTimer();
 }
 
@@ -176,25 +190,23 @@ FAiSpawnSetting ACA_EnemySpawner::GetSpawnSetting() const
 		return FAiSpawnSetting();
 	}
 	
-	const float ChanceThreshold = FMath::FRandRange(MinChanceToSpawn, MaxChanceToSpawn);
-	FAiSpawnSetting BestOption;
-	BestOption.ChanceToSpawn = DefaultBestOptionValue;
-
-	TArray<FAiSpawnSetting> ShuffledSettings = SpawnData->SpawnConfiguration;
-	Algo::RandomShuffle(ShuffledSettings);
-	
-	for (FAiSpawnSetting& Setting : ShuffledSettings)
+	float TotalWeight = 0.0f;
+	for (const FAiSpawnSetting& Setting : SpawnData->SpawnConfiguration)
 	{
-		if (Setting.ChanceToSpawn >= ChanceThreshold)
+		TotalWeight += Setting.ChanceToSpawn;
+	}
+	
+	float RandomValue = FMath::FRandRange(0.0f, TotalWeight);
+	
+	for (const FAiSpawnSetting& Setting : SpawnData->SpawnConfiguration)
+	{
+		if (RandomValue < Setting.ChanceToSpawn)
 		{
 			return Setting;
 		}
-
-		if (BestOption.ChanceToSpawn < Setting.ChanceToSpawn)
-		{
-			BestOption = Setting;
-		}
+		RandomValue -= Setting.ChanceToSpawn;
 	}
-	return BestOption;
+
+	return SpawnData->SpawnConfiguration.Last();
 }
 

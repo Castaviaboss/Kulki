@@ -4,11 +4,16 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Data/Player/CA_PlayerData.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kulki/Public/CA_GameInstance.h"
 #include "Kulki/Public/Data/CA_GameData.h"
 #include "Kulki/Public/Data/Input/CA_InputData.h"
 #include "Kulki/Public/GameModeOverride/PlayerController/CA_PlayerController.h"
+#include "Systems/AI/EnemyPawn/CA_EnemyCharacter.h"
 
 DEFINE_LOG_CATEGORY(CharacterLog);
 
@@ -17,6 +22,13 @@ ACA_Character::ACA_Character()
 	PrimaryActorTick.bCanEverTick = true;
 
 	GetCapsuleComponent()->SetSimulatePhysics(true);
+	
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	SpringArmComponent->SetUsingAbsoluteScale(true);
+
+	SpringArmComponent->SetupAttachment(RootComponent);
+	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
 void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -59,6 +71,29 @@ void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		return;
 	}
 	SetMappingContext(InputData->DefaultMappingContext);
+
+	PlayerData = GameData->PlayerData;
+	if (!IsValid(PlayerData))
+	{
+		UE_LOG(CharacterLog, Error, TEXT("[%hs] PlayerData invalid"), __FUNCTION__);
+		return;
+	}
+
+	MaxForce = PlayerData->MaxForce;
+	ForceMultiplier = PlayerData->ForceMultiplier;
+	GetCharacterMovement()->MaxWalkSpeed = PlayerData->MaxSpeed;
+
+	InitialOrthoWidth = CameraComponent->OrthoWidth;
+	InitialTargetArmLenght = SpringArmComponent->TargetArmLength;
+	InitialScaleAverage = (GetActorScale3D().X + GetActorScale3D().Y + GetActorScale3D().Z) / 3.0f;
+
+	ApplyStartStats(
+		PlayerData->StartStrength,
+		PlayerData->StartSpeed,
+		PlayerData->MassCoefficient,
+		PlayerData->AbsorptionFactor);
+
+	UpdateScaleFromStrength();
 }
 
 void ACA_Character::Tick(float DeltaSeconds)
@@ -90,6 +125,8 @@ void ACA_Character::SetMappingContext(const UInputMappingContext* MappingContext
 	Subsystem->ClearAllMappings();
 	Subsystem->AddMappingContext(MappingContext, Priority);
 }
+
+//Movement
 
 FVector ACA_Character::UpdateMousePosition() const
 {
@@ -125,19 +162,30 @@ void ACA_Character::MoveTowardsMouse(const float DeltaTime) const
 	Direction.Z = 0;
 	
 	const float Distance = Direction.Size();
-	if (Distance < MinMouseDistanceForMove) 
-	{
-		return;
-	}
+
+	const float BaseSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	const float EffectiveSpeed = BaseSpeed * CurrentSpeed / (CurrentStrength * MassCoefficient);
 
 	Direction.Normalize();
 	const FVector CurrentVelocity = GetCapsuleComponent()->GetComponentVelocity();
-	const FVector DesiredVelocity = Direction * MaxSpeed;
+	const FVector DesiredVelocity = Direction * EffectiveSpeed;
 	
 	FVector Force = (DesiredVelocity - CurrentVelocity) * ForceMultiplier;
 	Force = Force.GetClampedToMaxSize(MaxForce);
 	GetCapsuleComponent()->AddForce(Force / DeltaTime);
 }
+
+void ACA_Character::StartMove()
+{
+	bIsMoving = true;
+}
+
+void ACA_Character::StopMove()
+{
+	bIsMoving = false;
+}
+
+//Movement
 
 void ACA_Character::PhysicalPushCharacter(
 	const FVector& Force,
@@ -169,13 +217,70 @@ void ACA_Character::PhysicalPushCharacter(
 	}
 }
 
-void ACA_Character::StartMove()
+void ACA_Character::NotifyHit(
+	class UPrimitiveComponent* MyComp,
+	AActor* Other,
+	class UPrimitiveComponent* OtherComp,
+	bool bSelfMoved,
+	FVector HitLocation,
+	FVector HitNormal,
+	FVector NormalImpulse,
+	const FHitResult& Hit)
 {
-	bIsMoving = true;
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	
+	if (ACA_EnemyCharacter* Enemy = Cast<ACA_EnemyCharacter>(Other))
+	{
+		Enemy->TryAbsorb(this);
+	}
 }
 
-void ACA_Character::StopMove()
+//Stats Calculating
+
+void ACA_Character::AddStrength(const float StrengthToAdd)
 {
-	bIsMoving = false;
+	Super::AddStrength(StrengthToAdd);
+	UpdateScaleFromStrength();
 }
 
+void ACA_Character::ReduceStrength(const float StrengthToReduce)
+{
+	Super::ReduceStrength(StrengthToReduce);
+	UpdateScaleFromStrength();
+}
+
+//Stats Calculating
+
+void ACA_Character::UpdateScaleFromStrength()
+{
+	if (CurrentStrength >= PlayerData->AvailableStrengthRange.Y
+		|| CurrentStrength <= PlayerData->AvailableStrengthRange.X)
+	{
+		return;
+	}
+	
+	if (!IsValid(CameraComponent))
+	{
+		UE_LOG(CharacterLog, Error, TEXT("[%hs] CameraComponent invalid"), __FUNCTION__);
+		return;
+	}
+	
+	const float NewScale = CurrentStrength;
+	
+	SetActorScale3D(FVector(NewScale));
+
+	float ScaleRatio = NewScale / InitialScaleAverage;
+	
+	if (ScaleRatio < 1.0f)
+	{
+		ScaleRatio = FMath::Lerp(1.0f, ScaleRatio, 0.3f);
+	}
+	
+	const float NewOrthoWidth = (InitialOrthoWidth * ScaleRatio) * PlayerData->CameraHeightFactor;
+	const float NewTargetArmLenght = (InitialTargetArmLenght * ScaleRatio) * PlayerData->CameraHeightFactor;
+
+	CameraComponent->OrthoWidth = NewOrthoWidth;
+	SpringArmComponent->TargetArmLength = NewTargetArmLenght;
+}
+
+//Stats Calculating

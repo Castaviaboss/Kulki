@@ -53,4 +53,65 @@ void ACA_EnemyCharacter::InitCharacter(
 		return;
 	}
 	SphereDetector->SetSphereRadius(Config->SphereDetectorRadius);
+
+	const UCA_EnemyStatsData* EnemyStats = Config->EnemyStats;
+	if (!IsValid(EnemyStats))
+	{
+		UE_LOG(LogTemp, Error, TEXT("[%hs] EnemyStats invalid"), __FUNCTION__);
+		return;
+	}
+
+	const float StartStrength = FMath::RandRange(
+		EnemyStats->Configuration.StartStrengthRange.X, EnemyStats->Configuration.StartStrengthRange.Y);
+
+	const float StartSpeed = FMath::RandRange(
+		EnemyStats->Configuration.StartSpeedRange.X, EnemyStats->Configuration.StartSpeedRange.Y);
+
+	const float BaseMassCoefficient = FMath::RandRange(
+		EnemyStats->Configuration.MassCoefficientRange.X, EnemyStats->Configuration.MassCoefficientRange.Y);
+
+	LeaderStat = EnemyStats->Configuration.EnemyLeaderStat;
+	
+	ApplyStartStats(StartStrength, StartSpeed, BaseMassCoefficient, 0);
+}
+
+bool ACA_EnemyCharacter::TryAbsorb(ACA_BaseCharacter* AbsorbInstigator)
+{
+	if (AbsorbInstigator->CurrentStrength > CurrentStrength)
+	{
+		switch (LeaderStat)
+		{
+			case EEnemyLeaderStats::None: break;
+			case EEnemyLeaderStats::Strength:
+				AbsorbInstigator->AddStrength(CurrentStrength); break;
+			case EEnemyLeaderStats::Speed:
+				AbsorbInstigator->AddSpeed(CurrentSpeed); break;
+			case EEnemyLeaderStats::Both:
+				AbsorbInstigator->ReduceStrength(CurrentStrength);
+				AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
+		}
+		Destroy();
+		return true;
+	}
+
+	switch (LeaderStat)
+	{
+		case EEnemyLeaderStats::None: break;
+		case EEnemyLeaderStats::Strength:
+		AbsorbInstigator->ReduceStrength(CurrentStrength); break;
+		case EEnemyLeaderStats::Speed:
+		AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
+		case EEnemyLeaderStats::Both:
+		AbsorbInstigator->ReduceStrength(CurrentStrength);
+		AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
+	}
+
+	return false;
+}
+
+void ACA_EnemyCharacter::UpdateSpeed()
+{
+	Super::UpdateSpeed();
+
+	
 }

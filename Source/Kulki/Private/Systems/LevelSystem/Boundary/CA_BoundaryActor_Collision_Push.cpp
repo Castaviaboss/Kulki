@@ -54,7 +54,6 @@ void ACA_BoundaryActor_Collision_Push::NotifyActorEndOverlap(AActor* OtherActor)
 	ACA_Character* Character = Cast<ACA_Character>(OtherActor);
 	if (!IsValid(Character))
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%hs] OtherActor invalid"), __FUNCTION__);
 		return;
 	}
 
