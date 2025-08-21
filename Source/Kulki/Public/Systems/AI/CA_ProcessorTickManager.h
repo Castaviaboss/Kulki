@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "CA_ProcessorTickManager.generated.h"
 
-class UCA_BaseGoalProcessor;
+class UCA_BaseProcessor;
 
 UCLASS()
 class KULKI_API ACA_ProcessorTickManager : public AActor
@@ -24,12 +24,12 @@ protected:
 
 public:
 
-	void AddProcessor(UCA_BaseGoalProcessor* GoalProcessor);
+	void AddProcessor(UCA_BaseProcessor* GoalProcessor);
 
-	void RemoveProcessor(UCA_BaseGoalProcessor* GoalProcessor);
+	void RemoveProcessor(UCA_BaseProcessor* GoalProcessor);
 
 private:
 
 	UPROPERTY()
-	TArray<TObjectPtr<UCA_BaseGoalProcessor>> GoalProcessors;
+	TArray<TObjectPtr<UCA_BaseProcessor>> GoalProcessors;
 };

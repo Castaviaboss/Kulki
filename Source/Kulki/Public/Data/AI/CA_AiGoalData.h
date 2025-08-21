@@ -6,7 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "CA_AiGoalData.generated.h"
 
-class UCA_BaseGoalProcessor;
+class UCA_BaseProcessor;
 
 UENUM(BlueprintType)
 enum class EEnemyAIState : uint8
@@ -26,7 +26,7 @@ struct FAiGoalConfiguration
 	EEnemyAIState AiStateType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCA_BaseGoalProcessor> GoalProcessor;
+	TObjectPtr<UCA_BaseProcessor> GoalProcessor;
 };
 
 UCLASS()

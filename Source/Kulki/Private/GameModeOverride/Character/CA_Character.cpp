@@ -231,7 +231,14 @@ void ACA_Character::NotifyHit(
 	
 	if (ACA_EnemyCharacter* Enemy = Cast<ACA_EnemyCharacter>(Other))
 	{
-		Enemy->TryAbsorb(this);
+		const EEnemyLeaderStats TypeStat = Enemy->LeaderStat;
+		if (Enemy->TryAbsorb(this))
+		{
+			if (OnEnemyAbsorbed.IsBound())
+			{
+				OnEnemyAbsorbed.Broadcast(TypeStat);
+			}
+		}
 	}
 }
 

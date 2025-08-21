@@ -6,6 +6,7 @@
 #include "GameFramework/GameState.h"
 #include "CA_GameState.generated.h"
 
+class UCA_BaseProcessor;
 class ACA_EnemySpawner;
 class ACA_ProcessorTickManager;
 class UCA_LevelManagerComponent;
@@ -29,6 +30,11 @@ public:
 
 	UPROPERTY()
 	TObjectPtr<ACA_ProcessorTickManager> TickManager;
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCA_BaseProcessor> GameStateProcessor;
 
 private:
 

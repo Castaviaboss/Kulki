@@ -2,7 +2,7 @@
 
 #include "Kulki/Public/Systems/AI/CA_ProcessorTickManager.h"
 #include "GameModeOverride/GameState/CA_GameState.h"
-#include "Systems/AI/CA_BaseGoalProcessor.h"
+#include "Systems/AI/CA_BaseProcessor.h"
 
 ACA_ProcessorTickManager::ACA_ProcessorTickManager()
 {
@@ -28,7 +28,7 @@ void ACA_ProcessorTickManager::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	for (UCA_BaseGoalProcessor* Processor : GoalProcessors)
+	for (UCA_BaseProcessor* Processor : GoalProcessors)
 	{
 		if (!IsValid(Processor))
 		{
@@ -45,12 +45,12 @@ void ACA_ProcessorTickManager::Tick(float DeltaSeconds)
 	}
 }
 
-void ACA_ProcessorTickManager::AddProcessor(UCA_BaseGoalProcessor* GoalProcessor)
+void ACA_ProcessorTickManager::AddProcessor(UCA_BaseProcessor* GoalProcessor)
 {
 	GoalProcessors.Add(GoalProcessor);
 }
 
-void ACA_ProcessorTickManager::RemoveProcessor(UCA_BaseGoalProcessor* GoalProcessor)
+void ACA_ProcessorTickManager::RemoveProcessor(UCA_BaseProcessor* GoalProcessor)
 {
 	GoalProcessors.Remove(GoalProcessor);
 }

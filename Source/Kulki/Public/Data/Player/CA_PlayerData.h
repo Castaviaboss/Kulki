@@ -8,7 +8,7 @@
 
 class UCA_EnemyStatsData;
 
-UCLASS()
+UCLASS(Blueprintable)
 class KULKI_API UCA_PlayerData : public UDataAsset
 {
 	GENERATED_BODY()

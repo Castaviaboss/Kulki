@@ -1,15 +1,15 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Systems/AI/CA_BaseGoalProcessor.h"
-
+#include "Systems/AI/CA_BaseProcessor.h"
 #include "GameModeOverride/GameState/CA_GameState.h"
-#include "Systems/AI/CA_AiController.h"
 #include "Systems/AI/CA_ProcessorTickManager.h"
 
-void UCA_BaseGoalProcessor::InitProcessor(
-	ACA_AiController* OwnerController,
-	ACA_EnemyCharacter* OwnerPawn)
+void UCA_BaseProcessor::InitProcessor(
+	UObject* InstigatorInit,
+	AController* OwnerController,
+	ACA_BaseCharacter* OwnerPawn)
 {
+	InitInstigator = InstigatorInit;
 	Controller = OwnerController;
 	Pawn = OwnerPawn;
 
@@ -30,10 +30,10 @@ void UCA_BaseGoalProcessor::InitProcessor(
 		TickManager->AddProcessor(this);
 	}
 	
-	K2_ProcessorInit(OwnerController, OwnerPawn);
+	K2_ProcessorInit(InitInstigator, OwnerController, OwnerPawn);
 }
 
-void UCA_BaseGoalProcessor::TickProcessor(const float DeltaSeconds)
+void UCA_BaseProcessor::TickProcessor(const float DeltaSeconds)
 {
 	K2_TickProcessor(DeltaSeconds);
 }

@@ -4,7 +4,8 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/Character.h"
-#include "Systems/AI/CA_BaseGoalProcessor.h"
+#include "Systems/AI/CA_BaseProcessor.h"
+#include "Systems/AI/EnemyPawn/CA_EnemyCharacter.h"
 
 void ACA_AiController::InitController(
 	UCA_AiGoalData* GoalData,
@@ -26,7 +27,7 @@ void ACA_AiController::InitController(
 			continue;
 		}
 
-		Configuration.GoalProcessor->InitProcessor(this, OwnerPawn);
+		Configuration.GoalProcessor->InitProcessor(this, this, OwnerPawn);
 	}
 
 	if (!IsValid(GetBlackboardComponent()))

@@ -16,6 +16,8 @@ class ACA_PlayerController;
 
 DECLARE_LOG_CATEGORY_EXTERN(CharacterLog, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyAbsorbed, EEnemyLeaderStats, AbsorbedEnemyType);
+
 UCLASS()
 class KULKI_API ACA_Character : public ACA_BaseCharacter
 {
@@ -79,6 +81,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<ACA_PlayerController> PlayerController;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnEnemyAbsorbed OnEnemyAbsorbed;
 
 protected:
 
