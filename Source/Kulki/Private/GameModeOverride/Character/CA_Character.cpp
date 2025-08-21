@@ -161,15 +161,10 @@ void ACA_Character::MoveTowardsMouse(const float DeltaTime) const
 	FVector Direction = TargetPos - GetActorLocation();
 	Direction.Z = 0;
 	
-	const float Distance = Direction.Size();
-
-	const float BaseSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	const float EffectiveSpeed = BaseSpeed * CurrentSpeed / (CurrentStrength * MassCoefficient);
-
 	Direction.Normalize();
 	const FVector CurrentVelocity = GetCapsuleComponent()->GetComponentVelocity();
-	const FVector DesiredVelocity = Direction * EffectiveSpeed;
-	
+	const FVector DesiredVelocity = Direction * CurrentSpeed;
+	UE_LOG(CharacterLog, Error, TEXT("[%hs] CurrentSpeed %f"), __FUNCTION__, CurrentSpeed);
 	FVector Force = (DesiredVelocity - CurrentVelocity) * ForceMultiplier;
 	Force = Force.GetClampedToMaxSize(MaxForce);
 	GetCapsuleComponent()->AddForce(Force / DeltaTime);

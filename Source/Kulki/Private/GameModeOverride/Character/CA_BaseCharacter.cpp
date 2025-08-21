@@ -2,6 +2,8 @@
 
 #include "GameModeOverride/Character/CA_BaseCharacter.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 ACA_BaseCharacter::ACA_BaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -24,6 +26,7 @@ void ACA_BaseCharacter::ApplyStartStats(
 void ACA_BaseCharacter::AddStrength(const float StrengthToAdd)
 {
 	CurrentStrength += StrengthToAdd * AbsorptionFactor;
+	CurrentSpeed -= StrengthToAdd * MassCoefficient;
 	
 	if (OnStrengthChanged.IsBound())
 	{
@@ -34,6 +37,7 @@ void ACA_BaseCharacter::AddStrength(const float StrengthToAdd)
 void ACA_BaseCharacter::ReduceStrength(const float StrengthToReduce)
 {
 	CurrentStrength -= StrengthToReduce * AbsorptionFactor;
+	CurrentSpeed += StrengthToReduce * MassCoefficient;
 	
 	if (OnStrengthChanged.IsBound())
 	{
@@ -43,10 +47,8 @@ void ACA_BaseCharacter::ReduceStrength(const float StrengthToReduce)
 
 void ACA_BaseCharacter::AddSpeed(const float SpeedToAdd)
 {
-	const float Gain = SpeedToAdd / AbsorptionFactor;
-	const float Penalty = CurrentStrength * MassCoefficient;
-
-	CurrentSpeed += Gain - Penalty;
+	CurrentSpeed += SpeedToAdd * AbsorptionFactor;
+	CurrentSpeed = FMath::Min(CurrentSpeed, GetCharacterMovement()->GetMaxSpeed());
 
 	UpdateSpeed();
 	if (OnSpeedChanged.IsBound())
@@ -57,10 +59,8 @@ void ACA_BaseCharacter::AddSpeed(const float SpeedToAdd)
 
 void ACA_BaseCharacter::ReduceSpeed(const float SpeedToReduce)
 {
-	const float Loss = SpeedToReduce * AbsorptionFactor;
-	const float Penalty = CurrentStrength * MassCoefficient;
-
-	CurrentSpeed -= (Loss + Penalty);
+	CurrentSpeed -= SpeedToReduce * AbsorptionFactor;
+	CurrentSpeed = FMath::Max(CurrentSpeed, 0);
 
 	UpdateSpeed();
 	if (OnSpeedChanged.IsBound())

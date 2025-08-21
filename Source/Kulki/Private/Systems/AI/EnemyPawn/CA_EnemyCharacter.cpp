@@ -72,6 +72,8 @@ void ACA_EnemyCharacter::InitCharacter(
 
 	LeaderStat = EnemyStats->Configuration.EnemyLeaderStat;
 	
+	SetActorScale3D(FVector(StartStrength));
+	
 	ApplyStartStats(StartStrength, StartSpeed, BaseMassCoefficient, 0);
 }
 
