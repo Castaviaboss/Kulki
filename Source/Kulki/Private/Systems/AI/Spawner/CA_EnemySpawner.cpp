@@ -132,7 +132,7 @@ void ACA_EnemySpawner::TrySpawnEnemy()
 	if (NavigationSystem->ProjectPointToNavigation(CandidateLocation, NavLocation))
 	{
 		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		ACA_EnemyCharacter* Enemy = GetWorld()->SpawnActor<ACA_EnemyCharacter>(
 			SelectedSetting.EnemyClass.LoadSynchronous(),

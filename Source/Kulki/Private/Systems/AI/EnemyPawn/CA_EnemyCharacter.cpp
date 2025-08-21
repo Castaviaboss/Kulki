@@ -70,7 +70,7 @@ void ACA_EnemyCharacter::InitCharacter(
 	const float BaseMassCoefficient = FMath::RandRange(
 		EnemyStats->Configuration.MassCoefficientRange.X, EnemyStats->Configuration.MassCoefficientRange.Y);
 
-	LeaderStat = EnemyStats->Configuration.EnemyLeaderStat;
+	EnemyType = EnemyStats->Configuration.EnemyLeaderStat;
 	
 	SetActorScale3D(FVector(StartStrength));
 	
@@ -79,9 +79,10 @@ void ACA_EnemyCharacter::InitCharacter(
 
 bool ACA_EnemyCharacter::TryAbsorb(ACA_BaseCharacter* AbsorbInstigator)
 {
+	//TODO Fix this and child
 	if (AbsorbInstigator->CurrentStrength > CurrentStrength)
 	{
-		switch (LeaderStat)
+		switch (EnemyType)
 		{
 			case EEnemyType::None: break;
 			case EEnemyType::Red:
@@ -96,7 +97,7 @@ bool ACA_EnemyCharacter::TryAbsorb(ACA_BaseCharacter* AbsorbInstigator)
 		return true;
 	}
 
-	switch (LeaderStat)
+	switch (EnemyType)
 	{
 		case EEnemyType::None: break;
 		case EEnemyType::Red:

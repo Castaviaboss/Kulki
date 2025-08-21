@@ -33,5 +33,5 @@ public:
 	TObjectPtr<USphereComponent> SphereDetector;
 
 	UPROPERTY(BlueprintReadOnly)
-	EEnemyType LeaderStat = EEnemyType::Red;
+	EEnemyType EnemyType = EEnemyType::Red;
 };

@@ -226,7 +226,7 @@ void ACA_Character::NotifyHit(
 	
 	if (ACA_EnemyCharacter* Enemy = Cast<ACA_EnemyCharacter>(Other))
 	{
-		const EEnemyType TypeStat = Enemy->LeaderStat;
+		const EEnemyType TypeStat = Enemy->EnemyType;
 		if (Enemy->TryAbsorb(this))
 		{
 			if (OnEnemyAbsorbed.IsBound())

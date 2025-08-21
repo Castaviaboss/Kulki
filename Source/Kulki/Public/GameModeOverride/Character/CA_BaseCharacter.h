@@ -67,4 +67,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
 	float AbsorptionFactor = 1.0f;
+
+	//TODO Factor replace to Coefficient
 };

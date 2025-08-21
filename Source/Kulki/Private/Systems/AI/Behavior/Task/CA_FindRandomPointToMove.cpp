@@ -28,14 +28,14 @@ EBTNodeResult::Type UCA_FindRandomPointToMove::ExecuteTask(UBehaviorTreeComponen
 	}
 	
 	APawn* Pawn = Controller->GetPawn();
-	if (!IsValid(Blackboard))
+	if (!IsValid(Pawn))
 	{
 		UE_LOG(LogTemp, Error, TEXT("[%hs] Pawn invalid"), __FUNCTION__);
 		return EBTNodeResult::Failed;;
 	}
 	
 	const UNavigationSystemV1* NavigationSystem = UNavigationSystemV1::GetCurrent(Pawn);
-	if (!IsValid(Blackboard))
+	if (!IsValid(NavigationSystem))
 	{
 		UE_LOG(LogTemp, Error, TEXT("[%hs] NavigationSystem invalid"), __FUNCTION__);
 		return EBTNodeResult::Failed;;
