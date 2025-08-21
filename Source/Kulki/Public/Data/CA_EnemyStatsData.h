@@ -7,12 +7,12 @@
 #include "CA_EnemyStatsData.generated.h"
 
 UENUM(BlueprintType)
-enum class EEnemyLeaderStats : uint8
+enum class EEnemyType : uint8
 {
 	None		UMETA(DisplayName = "NONE"),
-	Strength	UMETA(DisplayName = "Strength"),
-	Speed		UMETA(DisplayName = "Speed"),
-	Both		UMETA(DisplayName = "Both")
+	Red			UMETA(DisplayName = "Red"),
+	Yellow		UMETA(DisplayName = "Yellow"),
+	Purple		UMETA(DisplayName = "Purple")
 };
 
 USTRUCT(BlueprintType)
@@ -21,7 +21,7 @@ struct FEnemyStatsConfiguration
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	EEnemyLeaderStats EnemyLeaderStat = EEnemyLeaderStats::Strength;
+	EEnemyType EnemyLeaderStat = EEnemyType::Red;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FVector2D StartStrengthRange = FVector2D(1.0f,1.0f);

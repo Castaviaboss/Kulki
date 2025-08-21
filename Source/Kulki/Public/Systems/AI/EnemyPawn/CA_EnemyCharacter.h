@@ -7,7 +7,7 @@
 #include "GameModeOverride/Character/CA_BaseCharacter.h"
 #include "CA_EnemyCharacter.generated.h"
 
-enum class EEnemyLeaderStats : uint8;
+enum class EEnemyType : uint8;
 class UCA_HeroComponent;
 class UCA_EnemyCharacterData;
 class USphereComponent;
@@ -33,5 +33,5 @@ public:
 	TObjectPtr<USphereComponent> SphereDetector;
 
 	UPROPERTY(BlueprintReadOnly)
-	EEnemyLeaderStats LeaderStat = EEnemyLeaderStats::Strength;
+	EEnemyType LeaderStat = EEnemyType::Red;
 };

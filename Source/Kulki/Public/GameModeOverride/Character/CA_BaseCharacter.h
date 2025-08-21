@@ -6,7 +6,7 @@
 #include "PaperCharacter.h"
 #include "CA_BaseCharacter.generated.h"
 
-enum class EEnemyLeaderStats : uint8;
+enum class EEnemyType : uint8;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStrengthChanged, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpeedChanged, float, NewValue);

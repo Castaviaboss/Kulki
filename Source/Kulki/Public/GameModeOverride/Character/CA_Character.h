@@ -16,7 +16,7 @@ class ACA_PlayerController;
 
 DECLARE_LOG_CATEGORY_EXTERN(CharacterLog, Log, All);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyAbsorbed, EEnemyLeaderStats, AbsorbedEnemyType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyAbsorbed, EEnemyType, AbsorbedEnemyType);
 
 UCLASS()
 class KULKI_API ACA_Character : public ACA_BaseCharacter

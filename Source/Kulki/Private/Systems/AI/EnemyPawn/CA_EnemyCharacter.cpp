@@ -83,12 +83,12 @@ bool ACA_EnemyCharacter::TryAbsorb(ACA_BaseCharacter* AbsorbInstigator)
 	{
 		switch (LeaderStat)
 		{
-			case EEnemyLeaderStats::None: break;
-			case EEnemyLeaderStats::Strength:
+			case EEnemyType::None: break;
+			case EEnemyType::Red:
 				AbsorbInstigator->AddStrength(CurrentStrength); break;
-			case EEnemyLeaderStats::Speed:
+			case EEnemyType::Yellow:
 				AbsorbInstigator->AddSpeed(CurrentSpeed); break;
-			case EEnemyLeaderStats::Both:
+			case EEnemyType::Purple:
 				AbsorbInstigator->ReduceStrength(CurrentStrength);
 				AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
 		}
@@ -98,14 +98,14 @@ bool ACA_EnemyCharacter::TryAbsorb(ACA_BaseCharacter* AbsorbInstigator)
 
 	switch (LeaderStat)
 	{
-		case EEnemyLeaderStats::None: break;
-		case EEnemyLeaderStats::Strength:
-		AbsorbInstigator->ReduceStrength(CurrentStrength); break;
-		case EEnemyLeaderStats::Speed:
-		AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
-		case EEnemyLeaderStats::Both:
-		AbsorbInstigator->ReduceStrength(CurrentStrength);
-		AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
+		case EEnemyType::None: break;
+		case EEnemyType::Red:
+			AbsorbInstigator->ReduceStrength(CurrentStrength); break;
+		case EEnemyType::Yellow:
+			AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
+		case EEnemyType::Purple:
+			AbsorbInstigator->ReduceStrength(CurrentStrength);
+			AbsorbInstigator->ReduceSpeed(CurrentSpeed); break;
 	}
 
 	return false;
