@@ -131,7 +131,7 @@ void ACA_EnemySpawner::TrySpawnEnemy()
 	if (NavigationSystem->ProjectPointToNavigation(CandidateLocation, NavLocation))
 	{
 		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 
 		ACA_EnemyCharacter* Enemy = GetWorld()->SpawnActor<ACA_EnemyCharacter>(
 			SelectedSetting.EnemyClass.LoadSynchronous(),
@@ -141,7 +141,7 @@ void ACA_EnemySpawner::TrySpawnEnemy()
 		);
 		if (!IsValid(Enemy))
 		{
-			UE_LOG(SpawnerLog, Error, TEXT("[%hs] Enemy invalid"), __FUNCTION__);
+			StartSpawnTimer();
 			return;
 		}
 
