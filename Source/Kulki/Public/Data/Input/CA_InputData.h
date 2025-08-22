@@ -9,6 +9,9 @@
 class UInputAction;
 class UInputMappingContext;
 
+/**
+ * DataAsset for easy access to different MappingContexts and Actions
+ */
 UCLASS()
 class KULKI_API UCA_InputData : public UDataAsset
 {

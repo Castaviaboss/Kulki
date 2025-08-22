@@ -14,6 +14,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyAbsorbed, EEnemyType, Absorb
 
 DECLARE_LOG_CATEGORY_EXTERN(CharacterLog, Log, All);
 
+/**
+ * Base ACA_BaseCharacter KULKI_API
+ */
+
 UCLASS()
 class KULKI_API ACA_BaseCharacter : public APaperCharacter
 {

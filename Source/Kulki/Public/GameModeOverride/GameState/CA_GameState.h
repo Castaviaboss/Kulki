@@ -14,6 +14,9 @@ class UCA_LevelManagerComponent;
 
 DECLARE_LOG_CATEGORY_EXTERN(GameStateLog, Log, All);
 
+/**
+ * Base ACA_GameState KULKI_API
+ */
 UCLASS()
 class KULKI_API ACA_GameState : public AGameState
 {

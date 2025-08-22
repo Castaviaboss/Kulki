@@ -6,6 +6,9 @@
 #include "GameFramework/PlayerState.h"
 #include "CA_PlayerState.generated.h"
 
+/**
+ * Base ACA_PlayerState KULKI_API
+ */
 UCLASS()
 class KULKI_API ACA_PlayerState : public APlayerState
 {

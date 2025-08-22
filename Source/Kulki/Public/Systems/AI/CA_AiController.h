@@ -14,6 +14,11 @@ class UCA_GoalProcessor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGoalUpdated);
 
+DECLARE_LOG_CATEGORY_EXTERN(AiControllerLog, Log, All);
+
+/**
+ * Base AiController class KULKI_API. 
+ */
 UCLASS()
 class KULKI_API ACA_AiController : public ADetourCrowdAIController
 {
@@ -52,5 +57,4 @@ private:
 	const FName GoalKey = "GoalKey";
 	
 	const FName PlayerKey = "PlayerKey";
-	
 };

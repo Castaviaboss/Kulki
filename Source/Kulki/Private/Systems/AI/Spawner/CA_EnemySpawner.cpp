@@ -4,7 +4,6 @@
 
 #include "CA_GameInstance.h"
 #include "NavigationSystem.h"
-#include "Algo/RandomShuffle.h"
 #include "Data/CA_GameData.h"
 #include "Data/AI/CA_AiSpawnData.h"
 #include "Data/AI/CA_EnemyCharacterData.h"
@@ -122,10 +121,14 @@ void ACA_EnemySpawner::TrySpawnEnemy()
 
 	FVector Center = CenterOfSpawn->GetActorLocation();
 	float Distance = FMath::FRandRange(SpawnData->SpawnRadiusRange.X, SpawnData->SpawnRadiusRange.Y);
+
+	constexpr float MinAngle = 0.0f;
+	constexpr float FullCircleRadians = 2.0f * PI;
+	constexpr float PlaneZ = 0.f;
 	
-	float Angle = FMath::FRandRange(0.f, 2.f * PI);
+	float Angle = FMath::FRandRange(MinAngle, FullCircleRadians * PI);
 	
-	FVector Offset = FVector(FMath::Cos(Angle), FMath::Sin(Angle), 0.f) * Distance;
+	FVector Offset = FVector(FMath::Cos(Angle), FMath::Sin(Angle), PlaneZ) * Distance;
 	FVector CandidateLocation = Center + Offset;
 	
 	FNavLocation NavLocation;
@@ -204,7 +207,7 @@ FAiSpawnSetting ACA_EnemySpawner::GetSpawnSetting() const
 		TotalWeight += Setting.ChanceToSpawn;
 	}
 	
-	float RandomValue = FMath::FRandRange(0.0f, TotalWeight);
+	float RandomValue = FMath::FRandRange(MinValueForRandomizer, TotalWeight);
 	
 	for (const FAiSpawnSetting& Setting : SpawnData->SpawnConfiguration)
 	{

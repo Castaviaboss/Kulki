@@ -7,6 +7,9 @@
 
 class UCA_BaseProcessor;
 
+/**
+ * Actor, which spawning by LevelManager and purpose of which is to enable the processor to tick if necessary.
+ */
 UCLASS()
 class KULKI_API ACA_ProcessorTickManager : public AActor
 {

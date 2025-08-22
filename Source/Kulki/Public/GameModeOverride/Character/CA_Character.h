@@ -61,7 +61,7 @@ public:
 		const bool bImpulse = true);
 	
 //Physic
-
+	
 	virtual void NotifyHit(
 		class UPrimitiveComponent* MyComp,
 		AActor* Other,

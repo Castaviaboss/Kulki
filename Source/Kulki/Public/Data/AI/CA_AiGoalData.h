@@ -32,6 +32,13 @@ struct FAiGoalConfiguration
 	int32 GoalPriority = 0;
 };
 
+/**
+ *  Data asset that defines AI goals for enemy characters
+ *
+ *  An AI state type (patrolling, chasing, fleeing)
+ *  A processor class that implements the logic for handling this goal reactive
+ *  A priority value that determines execution order when multiple goals are valid
+ */
 UCLASS()
 class KULKI_API UCA_AiGoalData : public UDataAsset
 {

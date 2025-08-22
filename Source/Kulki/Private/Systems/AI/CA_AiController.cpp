@@ -4,8 +4,10 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/Character.h"
-#include "Systems/AI/CA_GoalProcessor.h"
+#include "Processors/CA_GoalProcessor.h"
 #include "Systems/AI/EnemyPawn/CA_EnemyCharacter.h"
+
+DEFINE_LOG_CATEGORY(AiControllerLog);
 
 void ACA_AiController::InitController(
 	UCA_AiGoalData* GoalData,
@@ -13,13 +15,13 @@ void ACA_AiController::InitController(
 {
 	if (!IsValid(BehaviorTree))
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%hs] BehaviorTree invalid"), __FUNCTION__);
+		UE_LOG(AiControllerLog, Error, TEXT("[%hs] BehaviorTree invalid"), __FUNCTION__);
 		return;
 	}
 
 	if (!RunBehaviorTree(BehaviorTree))
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%hs] Failed run behavior tree"), __FUNCTION__);
+		UE_LOG(AiControllerLog, Error, TEXT("[%hs] Failed run behavior tree"), __FUNCTION__);
 		return;
 	}
 
@@ -27,21 +29,21 @@ void ACA_AiController::InitController(
 	{
 		if (Configuration.GoalProcessorClass.IsNull())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("[%hs] GoalProcessor is null"), __FUNCTION__);
+			UE_LOG(AiControllerLog, Warning, TEXT("[%hs] GoalProcessor is null"), __FUNCTION__);
 			continue;
 		}
 
 		TSubclassOf<UCA_GoalProcessor> ProcessorClass = Configuration.GoalProcessorClass.LoadSynchronous();
 		if (!IsValid(ProcessorClass))
 		{
-			UE_LOG(LogTemp, Error, TEXT("[%hs] ProcessorClass invalid"), __FUNCTION__);
+			UE_LOG(AiControllerLog, Error, TEXT("[%hs] ProcessorClass invalid"), __FUNCTION__);
 			return;
 		}
 
 		UCA_GoalProcessor* Processor = NewObject<UCA_GoalProcessor>(this, ProcessorClass);
 		if (!IsValid(Processor))
 		{
-			UE_LOG(LogTemp, Error, TEXT("[%hs] Processor invalid"), __FUNCTION__);
+			UE_LOG(AiControllerLog, Error, TEXT("[%hs] Processor invalid"), __FUNCTION__);
 			return;
 		}
 		Processor->SetPriority(Configuration.GoalPriority);
@@ -52,7 +54,7 @@ void ACA_AiController::InitController(
 
 	if (!IsValid(GetBlackboardComponent()))
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%hs] GetBlackboardComponent invalid"), __FUNCTION__);
+		UE_LOG(AiControllerLog, Error, TEXT("[%hs] GetBlackboardComponent invalid"), __FUNCTION__);
 		return;
 	}
 	
@@ -65,7 +67,7 @@ void ACA_AiController::UpdateGoal(
 {
 	if (!IsValid(GoalInstigator))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%hs] GoalInstigator is invalid"), __FUNCTION__);
+		UE_LOG(AiControllerLog, Warning, TEXT("[%hs] GoalInstigator is invalid"), __FUNCTION__);
 		return;
 	}
 	
@@ -73,7 +75,7 @@ void ACA_AiController::UpdateGoal(
 	
 	if (!IsValid(GetBlackboardComponent()))
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%hs] GetBlackboardComponent invalid"), __FUNCTION__);
+		UE_LOG(AiControllerLog, Error, TEXT("[%hs] GetBlackboardComponent invalid"), __FUNCTION__);
 		return;
 	}
 	GetBlackboardComponent()->SetValueAsEnum(GoalKey, static_cast<uint8>(NewGoal));

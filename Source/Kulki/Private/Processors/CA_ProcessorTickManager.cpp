@@ -1,8 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kulki/Public/Systems/AI/CA_ProcessorTickManager.h"
+#include "Kulki/Public/Processors/CA_ProcessorTickManager.h"
 #include "GameModeOverride/GameState/CA_GameState.h"
-#include "Systems/AI/CA_BaseProcessor.h"
+#include "Processors/CA_BaseProcessor.h"
 
 ACA_ProcessorTickManager::ACA_ProcessorTickManager()
 {

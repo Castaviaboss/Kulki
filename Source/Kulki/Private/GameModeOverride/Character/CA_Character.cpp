@@ -79,7 +79,6 @@ void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	MaxForce = PlayerData->MaxForce;
 	ForceMultiplier = PlayerData->ForceMultiplier;
-	GetCharacterMovement()->MaxWalkSpeed = PlayerData->MaxSpeed;
 
 	SpringArmComponent->TargetArmLength = PlayerData->TargetArmLenght;
 	CameraComponent->SetOrthoWidth(PlayerData->OrthoWidth);
@@ -98,7 +97,8 @@ void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		PlayerData->StartSpeed,
 		PlayerData->MassCoefficient);
 
-	UpdateScaleFromStrength();
+	UpdateStrengthModification();
+	UpdateSpeedModification();
 }
 
 void ACA_Character::Tick(float DeltaSeconds)
@@ -318,11 +318,15 @@ void ACA_Character::UpdateScaleFromStrength()
 	
 	SetActorScale3D(FVector(NewScale));
 
+	//After scale character - we need increase camera heigh for a good appearance
 	float ScaleRatio = NewScale / InitialScaleAverage;
+
+	constexpr float DefaultScaleRatio = 1.0f;
 	
-	if (ScaleRatio < 1.0f)
+	if (ScaleRatio < DefaultScaleRatio)
 	{
-		ScaleRatio = FMath::Lerp(1.0f, ScaleRatio, 0.3f);
+		constexpr float ScaleLerpAlpha = 0.3f;
+		ScaleRatio = FMath::Lerp(DefaultScaleRatio, ScaleRatio, ScaleLerpAlpha);
 	}
 	
 	const float NewOrthoWidth = (InitialOrthoWidth * ScaleRatio) * PlayerData->CameraHeightFactor;

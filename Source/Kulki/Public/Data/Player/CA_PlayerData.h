@@ -8,6 +8,9 @@
 
 class UCA_EnemyStatsData;
 
+/**
+ * DataAsset which contains player configuration. Stores everything related to player if that's need us in config
+ */
 UCLASS(Blueprintable)
 class KULKI_API UCA_PlayerData : public UDataAsset
 {
@@ -29,9 +32,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats Settings")
 	float MassCoefficient = 1.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement Settings")
-	float MaxSpeed = 600.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement Settings")
 	float MaxForce = 600.0f;

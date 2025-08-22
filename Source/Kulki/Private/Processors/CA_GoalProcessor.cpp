@@ -1,6 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Systems/AI/CA_GoalProcessor.h"
+#include "Processors/CA_GoalProcessor.h"
 
 void UCA_GoalProcessor::SetPriority(const int32 ProcessPriority)
 {

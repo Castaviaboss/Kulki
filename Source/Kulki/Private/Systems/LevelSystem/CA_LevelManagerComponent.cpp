@@ -13,7 +13,7 @@
 #include "Kulki/Public/Data/Level/CA_LevelData.h"
 #include "Kulki/Public/Systems/LevelSystem/Boundary/CA_BaseBoundaryActor.h"
 #include "NavMesh/NavMeshBoundsVolume.h"
-#include "Systems/AI/CA_ProcessorTickManager.h"
+#include "Processors/CA_ProcessorTickManager.h"
 
 DEFINE_LOG_CATEGORY(LevelManagerLog);
 

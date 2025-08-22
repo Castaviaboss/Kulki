@@ -14,6 +14,9 @@ DECLARE_LOG_CATEGORY_EXTERN(SpawnerLog, Log, All);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemySpawned, int32, NewCount);
 
+/**
+ * The class that controls the process of creating enemies on the map
+ */
 UCLASS()
 class KULKI_API ACA_EnemySpawner : public AActor
 {
@@ -66,4 +69,6 @@ private:
 	const float DefaultBestOptionValue = -1.0f;
 
 	const float DefaultLocationZ = 17.5;
+
+	const float MinValueForRandomizer = 0.0f;
 };

@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Systems/AI/CA_BaseProcessor.h"
+#include "CA_BaseProcessor.h"
 #include "CA_GameStateProcessor.generated.h"
 
+/**
+ * Processor with GameState-specific logic and type
+ */
 UCLASS()
 class KULKI_API UCA_GameStateProcessor : public UCA_BaseProcessor
 {

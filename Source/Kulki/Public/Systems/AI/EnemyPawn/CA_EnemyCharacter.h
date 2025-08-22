@@ -12,6 +12,9 @@ class UCA_HeroComponent;
 class UCA_EnemyCharacterData;
 class USphereComponent;
 
+/**
+ * Base class for enemy pawns
+ */
 UCLASS()
 class KULKI_API ACA_EnemyCharacter : public ACA_BaseCharacter
 {
@@ -24,8 +27,6 @@ public:
 	virtual void InitCharacter(
 		UCA_EnemyCharacterData* Config,
 		const float SpawnRadiusMultiplier);
-
-	virtual void UpdateSpeedModification() override;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<USphereComponent> SphereDetector;

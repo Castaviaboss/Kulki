@@ -7,8 +7,7 @@
 #include "Data/GameState/CA_GameStateData.h"
 #include "GameModeOverride/Character/CA_BaseCharacter.h"
 #include "Kulki/Public/Systems/LevelSystem/CA_LevelManagerComponent.h"
-#include "Systems/AI/CA_BaseProcessor.h"
-#include "Systems/Processor/CA_GameStateProcessor.h"
+#include "Processors/CA_GameStateProcessor.h"
 
 DEFINE_LOG_CATEGORY(GameStateLog);
 
@@ -59,6 +58,7 @@ void ACA_GameState::BeginPlay()
 		return;
 	}
 
+	//Create Processor, which BP contains the logic is implemented to track the win or lose conditions, and react to it
 	if (GameStateData->GameStateProcessorClass.IsNull())
 	{
 		UE_LOG(GameStateLog, Error, TEXT("[%hs] GameStateProcessorClass is null"), __FUNCTION__);

@@ -9,6 +9,9 @@
 
 class UCA_EnemyStatsData;
 
+/**
+ * DataAsset which contains visual attributes for EnemyCharacter and stats
+ */
 UCLASS()
 class KULKI_API UCA_EnemyCharacterData : public UDataAsset
 {
@@ -25,6 +28,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FLinearColor SpriteColor = FLinearColor::White;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ToolTip = "The AI has a sphere responsible for detecting the player. It is used in AI tasks that involve reacting to the player’s approach or retreat"))
 	float SphereDetectorRadius = 256.0f;
 };

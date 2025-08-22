@@ -7,6 +7,10 @@
 #include "Kulki/Public/Data/Level/CA_LevelData.h"
 #include "CA_BaseBoundaryActor.generated.h"
 
+/**
+ * A class that represents the boundaries of a map.
+ * Boundaries can be implemented in different ways and have different shapes.
+ */
 UCLASS(Abstract)
 class KULKI_API ACA_BaseBoundaryActor : public AActor
 {

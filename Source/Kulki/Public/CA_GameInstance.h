@@ -8,6 +8,10 @@
 
 class UCA_GameData;
 
+
+/**
+ * Base GameInstance KULKI_API
+ */
 UCLASS()
 class KULKI_API UCA_GameInstance : public UGameInstance
 {

@@ -12,6 +12,10 @@ class UCA_AiSpawnData;
 class UCA_LevelData;
 class UCA_InputData;
 
+/**
+ * Very cool DataAsset, which contains all the necessary data that needs to be accessed during gameplay.
+ * It is usually stored in the GameInstance for easy access and to ensure it exists at BeginPlay.
+ */
 UCLASS()
 class KULKI_API UCA_GameData : public UDataAsset
 {

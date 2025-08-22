@@ -8,6 +8,12 @@
 
 class UCA_GameStateProcessor;
 
+/**
+ * DataAsset which contains base rule for winning game
+ *
+ * Inside GameStateProcessorClass, the logic is implemented to track the win or lose conditions,
+ * and when the conditions are met, it executes certain actions, such as pausing the game.
+ */
 UCLASS(Blueprintable)
 class KULKI_API UCA_GameStateData : public UDataAsset
 {

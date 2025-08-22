@@ -9,6 +9,16 @@
 class ACA_BaseCharacter;
 class ACA_AiController;
 
+DECLARE_LOG_CATEGORY_EXTERN(ProcessorLog, Log, All);
+
+/**
+ * Simple UObject class, which mainly has to perform reactive logic.
+ * Usually, this involves subscribing to an event during initialization and further processing the event internally.
+ *
+ * A separate tick is added, which is controlled by ACA_ProcessorTickManager.
+ * Usually, there is no need for this, with rare exceptions.
+ *
+ */
 UCLASS(Blueprintable, meta = (ShowWorldContextPin), Abstract)
 class KULKI_API UCA_BaseProcessor : public UObject
 {

@@ -28,6 +28,11 @@ struct FAiSpawnSetting
 	float ChanceToSpawn = 1.0f;
 };
 
+/**
+ * DataAsset with enemyCharacter spawn settings
+ *
+ * With spawnConfiguration you can configure different types of enemies
+ */
 UCLASS()
 class KULKI_API UCA_AiSpawnData : public UDataAsset
 {
@@ -35,7 +40,7 @@ class KULKI_API UCA_AiSpawnData : public UDataAsset
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ToolTip = "If true – we will spawn enemies in the amount of CountMustBeSpawned. If false – enemies will spawn infinitely"))
 	bool bUseSpawnCounter = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "bUseSpawnCounter"))
@@ -44,7 +49,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FVector2D DelayBetweenSpawnRange = FVector2D::ZeroVector;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ToolTip = "We can specify within the radius of which type of actor the enemies will spawn. Usually, this is CA_Character"))
 	TSubclassOf<AActor> CenterOfSpawn;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

@@ -36,7 +36,7 @@ struct FLevelPlaneConfiguration
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Material")
 	TSoftObjectPtr<UMaterialInstance> Material;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Material")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Material", meta = (ToolTip = "We can change some material parameters. For example base plane material contains Tiling param. When we scale plane - we can increase tiling value for better result"))
 	TArray<FMaterialParameter> MaterialParameters;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sprite")
@@ -75,6 +75,9 @@ struct FLevelBoundaryConfiguration
 	float SphereRadius = 100.f;
 };
 
+/**
+ * DataAsset which contains level configuration. Stores everything related to level
+ */
 UCLASS()
 class KULKI_API UCA_LevelData : public UDataAsset
 {

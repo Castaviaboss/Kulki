@@ -6,6 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "CA_PlayerController.generated.h"
 
+/**
+ * Base ACA_PlayerController KULKI_API
+ */
 UCLASS()
 class KULKI_API ACA_PlayerController : public APlayerController
 {

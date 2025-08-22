@@ -84,10 +84,3 @@ void ACA_EnemyCharacter::InitCharacter(
 
 	GetCharacterMovement()->MaxWalkSpeed = StartSpeed;
 }
-
-void ACA_EnemyCharacter::UpdateSpeedModification()
-{
-	Super::UpdateSpeedModification();
-
-	
-}

@@ -6,6 +6,9 @@
 #include "CA_BaseProcessor.h"
 #include "CA_GoalProcessor.generated.h"
 
+/**
+ * Processor with AIGoal-specific logic and type
+ */
 UCLASS()
 class KULKI_API UCA_GoalProcessor : public UCA_BaseProcessor
 {
