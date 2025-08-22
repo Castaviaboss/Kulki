@@ -80,6 +80,8 @@ public:
 
 	virtual void UpdateStrengthModification() override;
 
+	virtual void UpdateSpeedModification() override;
+
 //Stats Calculating
 
 	void UpdateScaleFromStrength();
@@ -115,4 +117,6 @@ private:
 	float InitialScaleAverage;
 
 	bool ForceDestroyEnemyOnHit = false;
+
+	float Axis3DCount = 3.0f;
 };

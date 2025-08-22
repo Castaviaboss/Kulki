@@ -24,11 +24,10 @@ void ACA_BaseCharacter::AddStrength(
 	const float StrengthModifier)
 {
 	CurrentStrength += StrengthToAdd * StrengthModifier;
-	CurrentSpeed -= StrengthToAdd * MassCoefficient;
-
 	CurrentStrength = FMath::Clamp(CurrentStrength, StrengthClamp.X, StrengthClamp.Y);
-	CurrentSpeed = FMath::Clamp(CurrentSpeed, SpeedClamp.X, SpeedClamp.Y);
 
+	ReduceSpeed(StrengthToAdd, MassCoefficient);
+	
 	UpdateStrengthModification();
 	
 	if (OnStrengthChanged.IsBound())
@@ -57,10 +56,9 @@ void ACA_BaseCharacter::ReduceStrength(
 	const float StrengthModifier)
 {
 	CurrentStrength -= StrengthToReduce * StrengthModifier;
-	CurrentSpeed += StrengthToReduce * MassCoefficient;
-
 	CurrentStrength = FMath::Clamp(CurrentStrength, StrengthClamp.X, StrengthClamp.Y);
-	CurrentSpeed = FMath::Clamp(CurrentSpeed, SpeedClamp.X, SpeedClamp.Y);
+
+	AddSpeed(StrengthToReduce, MassCoefficient);
 
 	UpdateStrengthModification();
 	

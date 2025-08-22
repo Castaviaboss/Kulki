@@ -80,6 +80,7 @@ void ACA_GameState::BeginPlay()
 	}
 	
 	Processor->InitProcessor(this, PlayerController, Character);
+	GameStateProcessor = Processor;
 }
 
 void ACA_GameState::SetEnemySpawner(ACA_EnemySpawner* Spawner)

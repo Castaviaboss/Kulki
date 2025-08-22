@@ -24,7 +24,7 @@ struct FAiSpawnSetting
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCA_EnemyCharacterData> CharacterData;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(UIMin = "1", ClampMin = "1", UIMax = "100", ClampMax = "100"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin = "1", ClampMax = "100"))
 	float ChanceToSpawn = 1.0f;
 };
 

@@ -33,4 +33,6 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UPrimitiveComponent> PrimitiveComponent;
+
+	const float HalfExtend = 0.5f;
 };

@@ -6,6 +6,7 @@
 #include "GameFramework/GameState.h"
 #include "CA_GameState.generated.h"
 
+class UCA_GameStateProcessor;
 class UCA_BaseProcessor;
 class ACA_EnemySpawner;
 class ACA_ProcessorTickManager;
@@ -31,7 +32,13 @@ public:
 	UPROPERTY()
 	TObjectPtr<ACA_ProcessorTickManager> TickManager;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bGameEnded = false;
+
 private:
+
+	UPROPERTY()
+	TObjectPtr<UCA_GameStateProcessor> GameStateProcessor;
 
 	UPROPERTY()
 	TObjectPtr<UCA_LevelManagerComponent> LevelManager;

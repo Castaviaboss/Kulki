@@ -86,7 +86,7 @@ void ACA_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	
 	InitialOrthoWidth = PlayerData->OrthoWidth;
 	InitialTargetArmLenght = PlayerData->TargetArmLenght;
-	InitialScaleAverage = (GetActorScale3D().X + GetActorScale3D().Y + GetActorScale3D().Z) / 3.0f;
+	InitialScaleAverage = (GetActorScale3D().X + GetActorScale3D().Y + GetActorScale3D().Z) / Axis3DCount;
 
 	SpeedClamp = PlayerData->ClampSpeedRange;
 	StrengthClamp = PlayerData->ClampStrengthRange;
@@ -296,6 +296,12 @@ void ACA_Character::UpdateStrengthModification()
 {
 	Super::UpdateStrengthModification();
 	UpdateScaleFromStrength();
+}
+
+void ACA_Character::UpdateSpeedModification()
+{
+	Super::UpdateSpeedModification();
+	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
 }
 
 //Stats Calculating

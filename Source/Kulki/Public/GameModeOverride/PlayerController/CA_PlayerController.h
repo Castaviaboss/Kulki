@@ -14,4 +14,9 @@ class KULKI_API ACA_PlayerController : public APlayerController
 protected:
 
 	virtual void BeginPlay() override;
+
+public:
+
+	UFUNCTION(BlueprintCallable)
+	void SetInputGameOnlyMode();
 };

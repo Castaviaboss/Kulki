@@ -44,6 +44,9 @@ protected:
 	UPROPERTY(Transient, EditAnywhere)
 	TObjectPtr<UBehaviorTree> BehaviorTree;
 
+	UPROPERTY(Transient, VisibleAnywhere)
+	TArray<TObjectPtr<UCA_GoalProcessor>> ActiveProcessors;
+
 private:
 
 	const FName GoalKey = "GoalKey";

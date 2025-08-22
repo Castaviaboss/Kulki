@@ -25,9 +25,9 @@ void ACA_BoundaryActor_Collision_Push::InitBoundary(const FLevelBoundaryConfigur
 	if (UBoxComponent* BoxComponent = Cast<UBoxComponent>(PrimitiveComponent))
 	{
 		FVector Extent;
-		Extent.X = (InBoundaryConfig.BoxMax.X - InBoundaryConfig.BoxMin.X) * 0.5f;
-		Extent.Y = (InBoundaryConfig.BoxMax.Y - InBoundaryConfig.BoxMin.Y) * 0.5f;
-		Extent.Z = (InBoundaryConfig.BoxMax.Z - InBoundaryConfig.BoxMin.Z) * 0.5f;
+		Extent.X = (InBoundaryConfig.BoxMax.X - InBoundaryConfig.BoxMin.X) * HalfExtend;
+		Extent.Y = (InBoundaryConfig.BoxMax.Y - InBoundaryConfig.BoxMin.Y) * HalfExtend;
+		Extent.Z = (InBoundaryConfig.BoxMax.Z - InBoundaryConfig.BoxMin.Z) * HalfExtend;
 		
 		BoxComponent->SetBoxExtent(Extent);
 	}

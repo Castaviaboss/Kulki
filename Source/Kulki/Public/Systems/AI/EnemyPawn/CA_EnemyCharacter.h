@@ -25,6 +25,8 @@ public:
 		UCA_EnemyCharacterData* Config,
 		const float SpawnRadiusMultiplier);
 
+	virtual void UpdateSpeedModification() override;
+
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<USphereComponent> SphereDetector;
 

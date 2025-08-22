@@ -46,6 +46,8 @@ void ACA_AiController::InitController(
 		}
 		Processor->SetPriority(Configuration.GoalPriority);
 		Processor->InitProcessor(this, this, OwnerPawn);
+
+		ActiveProcessors.Add(Processor);
 	}
 
 	if (!IsValid(GetBlackboardComponent()))

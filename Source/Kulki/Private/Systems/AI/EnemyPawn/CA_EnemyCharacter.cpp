@@ -5,6 +5,7 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/SphereComponent.h"
 #include "Data/AI/CA_EnemyCharacterData.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameModeOverride/Character/CA_Character.h"
 
 ACA_EnemyCharacter::ACA_EnemyCharacter()
@@ -80,4 +81,13 @@ void ACA_EnemyCharacter::InitCharacter(
 
 	SpeedClamp = EnemyStats->Configuration.ClampSpeedRange;
 	StrengthClamp = EnemyStats->Configuration.ClampStrengthRange;
+
+	GetCharacterMovement()->MaxWalkSpeed = StartSpeed;
+}
+
+void ACA_EnemyCharacter::UpdateSpeedModification()
+{
+	Super::UpdateSpeedModification();
+
+	
 }

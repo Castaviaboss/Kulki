@@ -17,7 +17,7 @@ public class Kulki : ModuleRules
 			"Paper2D",
 			"AIModule",
 			"NavigationSystem",
-			"GameplayTags"
+			"UMG"
 		]);
 
 		PrivateDependencyModuleNames.AddRange([]);
